@@ -52,6 +52,28 @@ btnScroll.addEventListener('click',function(e){
   section_1.scrollIntoView({behavior:'smooth'})
 })
 
+// Scrolling with Nav section
+
+// document.querySelectorAll('.nav__link').forEach(link =>{
+//   link.addEventListener('click',function(e){
+//     e.preventDefault();
+
+//     const id = this.getAttribute('href');
+//     const select = document.querySelector(id)
+//     select.scrollIntoView({behavior:'smooth'})
+//   })
+// })
+
+document.querySelector('.nav__links').addEventListener('click',function(e){
+  e.preventDefault();
+  
+  if(e.target.classList.contains('nav__link')){
+    const id = e.target.getAttribute('href');
+    const select = document.querySelector(id)
+    select.scrollIntoView({behavior:'smooth'})
+  }
+})
+
 ///lectures
 // ////////////////////////////////////////
 
@@ -176,21 +198,22 @@ console.log(randomColor(0,255));
 
 // Example of how Event Listeners works
 
-document.querySelector('.nav__link').addEventListener('click',function(e){
-  this.style.backgroundColor = randomColor()
+document.querySelectorAll('.nav__link').addEventListener('click',function(e){
+  e.preventDefault();
+  // this.style.backgroundColor = randomColor(
   console.log('Link',e.target,e.currentTarget);
   console.log(e.currentTarget === this);
 
   // if we want to stop it run to the parents 
   // e.stopPropagation();
-})
+})  
 
 document.querySelector('.nav__links').addEventListener('click',function(e){
-  this.style.backgroundColor = randomColor()
+  // this.style.backgroundColor = randomColor()
   console.log('Container',e.target,e.currentTarget);
 })
 
 document.querySelector('.nav').addEventListener('click',function(e){
-  this.style.backgroundColor = randomColor();
+  // this.style.backgroundColor = randomColor();
   console.log('Nav',e.target,e.currentTarget);
 })
