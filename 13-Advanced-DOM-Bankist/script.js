@@ -198,7 +198,7 @@ console.log(randomColor(0,255));
 
 // Example of how Event Listeners works
 
-document.querySelectorAll('.nav__link').addEventListener('click',function(e){
+document.querySelector('.nav__link').addEventListener('click',function(e){
   e.preventDefault();
   // this.style.backgroundColor = randomColor(
   console.log('Link',e.target,e.currentTarget);
@@ -216,4 +216,38 @@ document.querySelector('.nav__links').addEventListener('click',function(e){
 document.querySelector('.nav').addEventListener('click',function(e){
   // this.style.backgroundColor = randomColor();
   console.log('Nav',e.target,e.currentTarget);
+})
+
+
+// DOM Traversing
+
+  // Going Downwords: Child
+const H1 = document.querySelector('h1');
+
+console.log(H1.querySelectorAll('.highlight'));
+console.log(H1.childNodes);
+console.log(H1.children);
+
+// H1.firstElementChild.style.color = 'white';
+// H1.lastElementChild.style.color = 'white';
+
+// Going Upwords : Parent
+
+console.log(H1.parentNode);  
+console.log(H1.parentElement);
+
+// H1.closest('.header').style.background = 'var(--gradient-primary)';//the closest method if there is 2 parents with the same class name it choices the closest one 
+
+// H1.closest('h1').style.background = 'var(--gradient-secondary)';
+
+// Going sideways: siblings 
+
+console.log(H1.parentElement.children);
+
+console.log(H1.previousElementSibling); //if there is not any elemnts before it will give null
+console.log(H1.nextElementSibling);
+
+[...H1.parentElement.children].forEach(function(el){
+
+  // if(el !== H1) el.style.transform = 'scale(0.5)'
 })
