@@ -7,6 +7,11 @@ const modal = document.querySelector('.modal');
 const overlay = document.querySelector('.overlay');
 const btnCloseModal = document.querySelector('.btn--close-modal');
 const btnsOpenModal = document.querySelectorAll('.btn--show-modal');
+const navContainer = document.querySelector('.nav')
+const NavLinks = document.querySelector('.nav__links');
+const tabs = document.querySelectorAll('.operations__tab')
+const componentContainer = document.querySelector('.operations__tab-container');
+const componentContent = document.querySelectorAll('.operations__content');
 const openModal = function (e) {
   e.preventDefault()
   modal.classList.remove('hidden');
@@ -64,7 +69,7 @@ btnScroll.addEventListener('click',function(e){
 //   })
 // })
 
-document.querySelector('.nav__links').addEventListener('click',function(e){
+NavLinks.addEventListener('click',function(e){
   e.preventDefault();
   
   if(e.target.classList.contains('nav__link')){
@@ -76,9 +81,6 @@ document.querySelector('.nav__links').addEventListener('click',function(e){
 
 
 // Tab component
-const tabs = document.querySelectorAll('.operations__tab')
-const componentContainer = document.querySelector('.operations__tab-container');
-const componentContent = document.querySelectorAll('.operations__content');
 
 componentContainer.addEventListener('click',function(e){
 
@@ -95,6 +97,24 @@ componentContainer.addEventListener('click',function(e){
   clicked.classList.add('operations__tab--active')
 })
 
+// Menu fade animation
+
+const refekter = function(e){
+  if(e.target.classList.contains('nav__link')){
+    const link = e.target;
+    const sibilings = link.closest('.nav').querySelectorAll('.nav__link');
+    const logo = link.closest('.nav').querySelector('.nav__logo');
+
+    sibilings.forEach(tar => {
+      if(tar !== link) tar.style.opacity = this;
+    })
+    logo.style.opacity = this;
+  }  
+}
+
+navContainer.addEventListener('mouseover',refekter.bind(0.5))
+
+navContainer.addEventListener('mouseout',refekter.bind(1))
 ///lectures
 // ////////////////////////////////////////
 
@@ -229,7 +249,7 @@ document.querySelector('.nav__link').addEventListener('click',function(e){
   // e.stopPropagation();
 })  
 
-document.querySelector('.nav__links').addEventListener('click',function(e){
+NavLinks.addEventListener('click',function(e){
   // this.style.backgroundColor = randomColor()
   console.log('Container',e.target,e.currentTarget);
 })
