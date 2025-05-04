@@ -12,6 +12,8 @@ const NavLinks = document.querySelector('.nav__links');
 const tabs = document.querySelectorAll('.operations__tab')
 const componentContainer = document.querySelector('.operations__tab-container');
 const componentContent = document.querySelectorAll('.operations__content');
+const btnScroll = document.querySelector('.btn--scroll-to')
+const section_1 = document.querySelector('#section--1')
 const openModal = function (e) {
   e.preventDefault()
   modal.classList.remove('hidden');
@@ -33,8 +35,6 @@ document.addEventListener('keydown', function (e) {
   }
 });
 
-const btnScroll = document.querySelector('.btn--scroll-to')
-const section_1 = document.querySelector('#section--1')
 
 btnScroll.addEventListener('click',function(e){
   const s1Coord = section_1.getBoundingClientRect();
@@ -115,6 +115,33 @@ const refekter = function(e){
 navContainer.addEventListener('mouseover',refekter.bind(0.5))
 
 navContainer.addEventListener('mouseout',refekter.bind(1))
+
+
+// Nav Fixed in scroll
+
+window.addEventListener('scroll',function(e){
+  if(section_1.getBoundingClientRect().top <= 1){
+    navContainer.classList.add('sticky')
+  }
+  if(window.scrollY == 0) navContainer.classList.remove('sticky')
+})
+
+
+// sticky navigation: The Intersection Observer API
+
+const obsCallBack = function(entries,observer){
+  entries.forEach(el =>{
+    console.log(el);
+  })
+}
+const obsOption = {
+  root: null,
+  threshold: 0.1,
+};
+
+const observer = new IntersectionObserver(obsCallBack,obsOption);
+observer.observe(section_1)
+
 ///lectures
 // ////////////////////////////////////////
 
