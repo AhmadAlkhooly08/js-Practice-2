@@ -3,6 +3,7 @@
 ///////////////////////////////////////
 // Modal window
 
+const header = document.querySelector('.header')
 const modal = document.querySelector('.modal');
 const overlay = document.querySelector('.overlay');
 const btnCloseModal = document.querySelector('.btn--close-modal');
@@ -14,6 +15,7 @@ const componentContainer = document.querySelector('.operations__tab-container');
 const componentContent = document.querySelectorAll('.operations__content');
 const btnScroll = document.querySelector('.btn--scroll-to')
 const section_1 = document.querySelector('#section--1')
+const allSections = document.querySelectorAll('.section');
 const openModal = function (e) {
   e.preventDefault()
   modal.classList.remove('hidden');
@@ -119,31 +121,56 @@ navContainer.addEventListener('mouseout',refekter.bind(1))
 
 // Nav Fixed in scroll
 
-window.addEventListener('scroll',function(e){
-  if(section_1.getBoundingClientRect().top <= 1){
-    navContainer.classList.add('sticky')
-  }
-  if(window.scrollY == 0) navContainer.classList.remove('sticky')
-})
+// window.addEventListener('scroll',function(e){
+//   if(section_1.getBoundingClientRect().top <= 1){
+//     navContainer.classList.add('sticky')
+//   }
+//   if(window.scrollY == 0) navContainer.classList.remove('sticky')
+// })
 
 
 // sticky navigation: The Intersection Observer API
 
-const obsCallBack = function(entries,observer){
-  entries.forEach(el =>{
-    console.log(el);
+const navHeight = navContainer.getBoundingClientRect().height;
+console.log(navHeight);
+const headerCall = function(entries){
+  const [entry] = entries; // this is same if we do = entries[0]
+  if(!entry.isIntersecting) navContainer.classList.add('sticky')
+  else navContainer.classList.remove('sticky')
+}
+const headerOption = {
+  root:null,
+  threshold:0,
+  rootMargin: `-${navHeight}px`,
+}
+const headerObserver = new IntersectionObserver(headerCall,headerOption);
+headerObserver.observe(header)
+
+
+// Revealing Elements on Scroll
+
+const revealSection = function(entries,observe){
+  entries.forEach(entry =>{
+
+    if(entry.isIntersecting) {
+      entry.target.classList.remove('section--hidden')
+      observe.unobserve(entry.target)
+    }
   })
 }
-const obsOption = {
-  root: null,
-  threshold: 0.1,
-};
 
-const observer = new IntersectionObserver(obsCallBack,obsOption);
-observer.observe(section_1)
+const allObserve = new IntersectionObserver(revealSection,{
+  root:null,
+  threshold:0.15,
+})
 
+allSections.forEach(section => {
+  allObserve.observe(section)
+  section.classList.add('section--hidden')
+})
 ///lectures
-// ////////////////////////////////////////
+// ///////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
 
 //Selecting, Creating, and Deleting Elements
 
@@ -152,10 +179,8 @@ console.log(document.documentElement);
 console.log(document.head);
 console.log(document.body);
 
-const allSections = document.querySelectorAll('.section');//this is a node list
 console.log(allSections);
 
-const header = document.querySelector('.header')
 document.getElementById('section--1')
 
 const allBtn = document.getElementsByTagName('button');//this returns htmlCollection wich is live if we delete a btn it will automaticly ben deleted from here
