@@ -16,6 +16,7 @@ const componentContent = document.querySelectorAll('.operations__content');
 const btnScroll = document.querySelector('.btn--scroll-to')
 const section_1 = document.querySelector('#section--1')
 const allSections = document.querySelectorAll('.section');
+const section1_img = document.querySelectorAll('.features__img')
 const openModal = function (e) {
   e.preventDefault()
   modal.classList.remove('hidden');
@@ -167,6 +168,30 @@ const allObserve = new IntersectionObserver(revealSection,{
 allSections.forEach(section => {
   allObserve.observe(section)
   section.classList.add('section--hidden')
+});
+
+
+// Lazy Loading Images
+
+section1_img.forEach(img => {
+
+  const lazy = function(entries,observe){
+    const [entry] = entries;
+  
+    if(entry.isIntersecting){
+      entry.target.src = entry.target.getAttribute('data-src');
+      entry.target.addEventListener('load',()=> {
+        entry.target.classList.remove('lazy-img');
+      })
+      observe.unobserve(entry.target)
+    }
+  }
+  const imgLazy = new IntersectionObserver(lazy,{
+    root:null,
+    threshold:0.60,
+  })  
+
+  imgLazy.observe(img)
 })
 ///lectures
 // ///////////////////////////////////////////////////////////
