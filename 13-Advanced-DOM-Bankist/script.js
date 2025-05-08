@@ -192,6 +192,36 @@ section1_img.forEach(img => {
   })  
 
   imgLazy.observe(img)
+});
+
+// Slider Section
+
+const sliders = document.querySelectorAll('.slide');
+const slide = document.querySelector('.slider');
+const btnLeft = document.querySelector('.slider__btn--left')
+const btnRihgt = document.querySelector('.slider__btn--right')
+let currentSlide = 0;
+const maxSlide= sliders.length -1;
+
+const goSlide = function(slid){
+  sliders.forEach((slide,i)=>{
+    slide.style.transform = `translateX(${100 *(i- slid)}%)`
+  })
+}
+
+goSlide(currentSlide)
+
+// Next right
+btnRihgt.addEventListener('click',function(e){
+  if(currentSlide === maxSlide) currentSlide = 0;
+  else currentSlide++;
+  goSlide(currentSlide)
+})
+// before left
+btnLeft.addEventListener('click',function(e){
+  if(currentSlide === 0) currentSlide = maxSlide
+  else currentSlide--;
+  goSlide(currentSlide)
 })
 ///lectures
 // ///////////////////////////////////////////////////////////
