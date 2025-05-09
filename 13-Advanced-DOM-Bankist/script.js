@@ -198,11 +198,19 @@ section1_img.forEach(img => {
 
 const sliders = document.querySelectorAll('.slide');
 const slide = document.querySelector('.slider');
-const btnLeft = document.querySelector('.slider__btn--left')
-const btnRihgt = document.querySelector('.slider__btn--right')
+const dotContainer = document.querySelector('.dots');
+const btnLeft = document.querySelector('.slider__btn--left');
+const btnRihgt = document.querySelector('.slider__btn--right');
 let currentSlide = 0;
 const maxSlide= sliders.length -1;
 
+
+const creatDots = function(){
+  sliders.forEach((e,i) =>{
+    dotContainer.insertAdjacentHTML("beforeend",`<button class="dots__dot" data-slide="${i}"></button>`);
+  })
+}
+creatDots();
 const goSlide = function(slid){
   sliders.forEach((slide,i)=>{
     slide.style.transform = `translateX(${100 *(i- slid)}%)`
@@ -212,17 +220,27 @@ const goSlide = function(slid){
 goSlide(currentSlide)
 
 // Next right
-btnRihgt.addEventListener('click',function(e){
+const nextSlide = function(){
   if(currentSlide === maxSlide) currentSlide = 0;
   else currentSlide++;
   goSlide(currentSlide)
-})
-// before left
-btnLeft.addEventListener('click',function(e){
+}
+const previoseSlide = function(){
   if(currentSlide === 0) currentSlide = maxSlide
   else currentSlide--;
   goSlide(currentSlide)
+}
+
+btnRihgt.addEventListener('click',nextSlide)
+// before left
+btnLeft.addEventListener('click',previoseSlide)
+
+document.addEventListener('keydown',function(e){
+  console.log(e);
+  if(e.key === 'ArrowRight')nextSlide()
+  e.key === 'ArrowLeft' && previoseSlide()
 })
+
 ///lectures
 // ///////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
