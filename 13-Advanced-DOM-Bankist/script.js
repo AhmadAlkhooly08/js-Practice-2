@@ -262,6 +262,7 @@ const sliderSection = function(){
     }
   })
 }  
+sliderSection();
 ///lectures
 // ///////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -437,4 +438,17 @@ console.log(H1.nextElementSibling);
 [...H1.parentElement.children].forEach(function(el){
 
   // if(el !== H1) el.style.transform = 'scale(0.5)'
+})
+
+document.addEventListener('DOMContentLoaded',function(e){
+  console.log('Html paresd and dom tree build',e);
+})
+window.addEventListener('load',function(e){
+  console.log('page finished loading',e);
+})
+
+window.addEventListener('Beforeunload',function(e){
+  e.preventDefault()
+  console.log(e);
+  e.returnValue = ''
 })
