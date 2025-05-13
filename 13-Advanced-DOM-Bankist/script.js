@@ -82,7 +82,6 @@ NavLinks.addEventListener('click',function(e){
   }
 })
 
-
 // Tab component
 
 componentContainer.addEventListener('click',function(e){
@@ -102,24 +101,20 @@ componentContainer.addEventListener('click',function(e){
 
 // Menu fade animation
 
-const refekter = function(e){
+const refrekter = function(e){
   if(e.target.classList.contains('nav__link')){
     const link = e.target;
-    const sibilings = link.closest('.nav').querySelectorAll('.nav__link');
+    const siblings = link.closest('.nav').querySelectorAll('.nav__link');
     const logo = link.closest('.nav').querySelector('.nav__logo');
-
-    sibilings.forEach(tar => {
+    siblings.forEach(tar =>{
       if(tar !== link) tar.style.opacity = this;
     })
     logo.style.opacity = this;
-  }  
+  }
+  
 }
-
-navContainer.addEventListener('mouseover',refekter.bind(0.5))
-
-navContainer.addEventListener('mouseout',refekter.bind(1))
-
-
+navContainer.addEventListener('mouseover',refrekter.bind(0.5));
+navContainer.addEventListener('mouseout',refrekter.bind(1))
 // Nav Fixed in scroll
 
 // window.addEventListener('scroll',function(e){
@@ -188,7 +183,8 @@ section1_img.forEach(img => {
   }
   const imgLazy = new IntersectionObserver(lazy,{
     root:null,
-    threshold:0.60,
+    threshold:0,
+    rootMargin: '-200px',
   })  
 
   imgLazy.observe(img)

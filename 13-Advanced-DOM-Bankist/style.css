@@ -673,3 +673,21 @@ h4 {
   font-size: 1.5rem;
   font-weight: 400;
 }
+
+/* const refekter = function(e){
+  if(e.target.classList.contains('nav__link')){
+    const link = e.target;
+    const sibilings = link.closest('.nav').querySelectorAll('.nav__link');
+    const logo = link.closest('.nav').querySelector('.nav__logo');
+
+    sibilings.forEach(tar => {
+      if(tar !== link) tar.style.opacity = this;
+    })
+    logo.style.opacity = this;
+  }  
+}
+
+navContainer.addEventListener('mouseover',refekter.bind(0.5))
+
+navContainer.addEventListener('mouseout',refekter.bind(1))
+ */
