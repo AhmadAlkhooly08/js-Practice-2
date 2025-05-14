@@ -101,20 +101,23 @@ componentContainer.addEventListener('click',function(e){
 
 // Menu fade animation
 
-const refrekter = function(e){
+const refekter = function(e){
   if(e.target.classList.contains('nav__link')){
     const link = e.target;
-    const siblings = link.closest('.nav').querySelectorAll('.nav__link');
+    const sibilings = link.closest('.nav').querySelectorAll('.nav__link');
     const logo = link.closest('.nav').querySelector('.nav__logo');
-    siblings.forEach(tar =>{
+
+    sibilings.forEach(tar => {
       if(tar !== link) tar.style.opacity = this;
     })
     logo.style.opacity = this;
-  }
-  
+  }  
 }
-navContainer.addEventListener('mouseover',refrekter.bind(0.5));
-navContainer.addEventListener('mouseout',refrekter.bind(1))
+
+navContainer.addEventListener('mouseover',refekter.bind(0.5))
+
+navContainer.addEventListener('mouseout',refekter.bind(1))
+
 // Nav Fixed in scroll
 
 // window.addEventListener('scroll',function(e){
@@ -142,9 +145,7 @@ const headerOption = {
 const headerObserver = new IntersectionObserver(headerCall,headerOption);
 headerObserver.observe(header)
 
-
 // Revealing Elements on Scroll
-
 const revealSection = function(entries,observe){
   entries.forEach(entry =>{
 
@@ -165,9 +166,7 @@ allSections.forEach(section => {
   section.classList.add('section--hidden')
 });
 
-
 // Lazy Loading Images
-
 section1_img.forEach(img => {
 
   const lazy = function(entries,observe){
@@ -199,8 +198,6 @@ const sliderSection = function(){
   const btnRihgt = document.querySelector('.slider__btn--right');
   let currentSlide = 0;
   const maxSlide= sliders.length -1;
-
-
   // Functions
   const goSlide = function(curSlid){
     sliders.forEach((slide,i)=>{
@@ -257,6 +254,7 @@ const sliderSection = function(){
       activatDots(currentSlide)
     }
   })
+
 }  
 sliderSection();
 ///lectures
