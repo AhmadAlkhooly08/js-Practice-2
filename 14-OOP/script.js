@@ -9,7 +9,6 @@ const Person = function(firstName,birtYear){
     this.firstName = firstName
     this.birtYear = birtYear
 
-    this.age = 2025 - birtYear
 }
 // with constructure function  we use the (new) methode. and arrow functions doesnt work
 const Ahmad = new Person('Ahmad',2008);
@@ -30,3 +29,29 @@ console.log(jay instanceof Person);//false
 // 3. {} is linked to a prototype
 // 4. function automatically return {}⁡
 
+// Prototypes
+
+console.log(Person.prototype);
+
+Person.prototype.calcAge = function(){
+    console.log(2025 - this.birtYear);
+}
+
+Ahmad.calcAge()
+
+console.log(Ahmad.__proto__);
+console.log(Ahmad.__proto__ === Person.prototype); // true
+
+// Not: Person.prototype is not the prototype of person but it will be used as a prototype for all the objects created by the contructure function
+
+console.log(Person.prototype.isPrototypeOf(mehmed)); //true
+console.log(Person.prototype.isPrototypeOf(Person)); //False
+
+Person.prototype.country = 'egypt';
+console.log(Ahmad,mehmed);
+
+console.log(Ahmad.country = 'egypt',mehmed.country = 'osmanli');
+console.log(Ahmad,mehmed);
+
+console.log(Matilda.hasOwnProperty('birtYear'));//true
+console.log(Matilda.hasOwnProperty('country'));//False because it is in the Person prototype
