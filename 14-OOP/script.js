@@ -55,3 +55,20 @@ console.log(Ahmad,mehmed);
 
 console.log(Matilda.hasOwnProperty('birtYear'));//true
 console.log(Matilda.hasOwnProperty('country'));//False because it is in the Person prototype
+
+
+console.log('-------Edabi-code------------------------');
+function checkEquals(arr1, arr2) {
+    let check;
+    arr1.forEach(e => {
+        for(let i =0; i< arr2.length; i++){
+            if(e === arr2[i]) check = true;
+            else check = false;
+        }
+    });
+    console.log(check);
+}
+checkEquals([1, 2], [1, 3])
+checkEquals([1, 2], [1, 2])
+checkEquals([4, 5, 6], [4, 5, 6])
+checkEquals([4, 7, 6], [4, 5, 6])
