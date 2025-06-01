@@ -31,6 +31,14 @@ console.log(jay instanceof Person);//false
 
 // Prototypes
 
+Person.hey= function(){
+    console.log('hy there 👋🏿');
+}
+
+Person.hey() // ? we can do this
+
+//! Ahmad.hey() But this no figure way
+
 console.log(Person.prototype);
 
 Person.prototype.calcAge = function(){
@@ -134,25 +142,46 @@ const PersonCl1 = class{}
 // class decaloration
 
 class PersonCl{
-    constructor(firstName,birthYear){
-        this.firstName =firstName,
+    constructor(fullName,birthYear){
+        this.fullName =fullName,
         this.birthYear = birthYear
     }
 
-    // Methods will be added to .prototype property
+    //* Instance method
+    //* Methods will be added to .prototype property
     calcAge(){
         console.log(2025 - this.birthYear);
     }
 
     greet(){
-        console.log(`Hey ${this.firstName}`);
+        console.log(`Hey ${this.fullName}`);
+    }
+
+    get country(){
+        return 'Egypt'
+    }
+
+    // set a property that alredy exists
+    set fullName(name){
+        if(name.includes(' ')) this._fullName = name
+        else alert('this is not a full name')
+    }
+    get fullName(){
+        return this._fullName
+    }
+
+    // ! Static Method
+    static hey(){
+        console.log('Hy there 👋🏿');
     }
 }
 
-const mahmoud = new PersonCl('Mahmoud',1950);
+const mahmoud = new PersonCl('Mahmoud Elazhary',1950);
 console.log(mahmoud);
 mahmoud.calcAge()
-console.log(mahmoud.__proto__ === PersonCl.prototype);
+console.log(mahmoud.__proto__ === PersonCl.prototype,mahmoud.country);
+
+const walter = new PersonCl('walter new',1980)
 
 // PersonCl.prototype.greet = function(){
 //     console.log(`Hey ${this.firstName}`);
@@ -162,3 +191,25 @@ mahmoud.greet()
 // ! 1. clases are not hoisted
 // ? 2. clases are first class citizes
 // ^ 3. clases are executed in strict mode
+
+PersonCl.hey()
+// ! it will not work on child proto it is linked on PersonCl prototype
+
+// Setters and Getters
+
+const account = {
+    owner:'Ahmad',
+    movements: [234,5431,5,8765,765],
+
+    get latest(){
+        return this.movements.slice(-1).pop()
+    },
+
+    set setter(mov){
+        return this.movements.push(mov)
+    }//it must contain a (mov)
+}
+
+account.setter = 50
+
+console.log(account.latest);
