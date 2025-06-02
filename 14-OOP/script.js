@@ -213,3 +213,89 @@ const account = {
 account.setter = 50
 
 console.log(account.latest);
+
+
+// Object.creat
+
+const PersonProto = {
+    calcAge(){
+        console.log(2025 - this.birthYear);
+    },
+    init(name,birthYear){
+        this.name = name;
+        this.birthYear = birthYear;
+    }
+}
+
+const steve = Object.create(PersonProto)
+
+console.log(steve);
+steve.init('steve',2008)
+steve.calcAge()
+
+console.log(steve.__proto__ === PersonProto);
+
+const Muslim = Object.create(PersonProto)
+
+Muslim.init('Muslim',2000)
+console.log(Muslim);
+Muslim.calcAge()
+
+class acc{
+    constructor (name,currency,pin){
+        this.name = name,
+        this.currency = currency,
+        this.pin = pin,
+        this.movements = []
+    }
+
+    deposit(d){
+        this.movements.push(d)
+        // console.log(this.movements);
+    }
+    withdraw(w){
+        this.movements.push(-w)
+        // console.log(this.movements);
+    }
+
+    get latest(){
+        console.log(this.movements.slice(-1).pop());
+    }
+
+    set Setlatest(mov){
+        this.movements.push(mov)
+    }
+
+    static helper(){
+        console.log('we can not help you from here call us with your variable name');
+    }
+}
+
+const ahmad = new acc('Ahmad','USD',7191)
+
+ahmad.deposit(300)
+ahmad.deposit(100)
+ahmad.withdraw(70)
+ahmad.withdraw(30)
+ahmad.deposit(400)
+console.log(ahmad);
+
+ahmad.Setlatest = Math.trunc(Math.random() * 100)
+ahmad.latest
+acc.helper()
+
+const vipAccount = Object.create(acc.prototype)
+
+vipAccount.init = function(name,currency,pin){
+    this.name = name,
+    this.currency = currency,
+    this.pin = pin
+}
+vipAccount.init('VIP Account','EUR',9999)
+vipAccount.movements = [];
+
+vipAccount.deposit = acc.prototype.deposit;
+vipAccount.deposit(1000)
+vipAccount.deposit(500)
+
+console.log(vipAccount);
