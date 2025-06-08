@@ -299,3 +299,91 @@ vipAccount.deposit(1000)
 vipAccount.deposit(500)
 
 console.log(vipAccount);
+
+///////////////////////////////////////
+// Coding Challenge #2
+
+
+//* 1. Re-create challenge 1, but this time using an ES6 class;
+
+//& 2. Add a getter called 'speedUS' which returns the current speed in mi/h (divide by 1.6);
+
+//* 3. Add a setter called 'speedUS' which sets the current speed in mi/h (but converts it to km/h before storing the value, by multiplying the input by 1.6);
+
+//& 4. Create a new car and experiment with the accelerate and brake methods, and with the getter and setter.
+
+//* DATA CAR 1: 'Ford' going at 120 km/h
+
+//& GOOD LUCK 😀
+
+
+class Return{
+    constructor(make,plate,speed){
+        this.make = make,
+        this.speed = speed,
+        this.plate = plate
+    }
+
+    accelerate(){
+        console.log(`${this.make} car with ${this.plate} went on ${this.speed += 10}speed`);
+    }
+
+    brak(){
+        console.log(`${this.speed -= 5}`);
+    }
+
+    get speedUS(){
+        console.log(`${this.speed / 1.6} mi/h`);
+    }
+
+    set speedUS(s){
+        this.speed = s * 1.6; 
+    }
+}
+
+const Ford = new Return('Ford',345094923,120)
+Ford.speedUS = 90;
+Ford.speedUS
+Ford.accelerate()
+
+const toyotta = new Return('Toyotta',245236743,84);
+toyotta.speedUS = 130;
+toyotta.speedUS
+toyotta.accelerate()
+
+console.log(Ford);
+console.log(toyotta);
+
+
+// Inheritance Between "Classes": Constructor Functions
+
+const PersonF = function(firstName,birthYear){
+    this.firstName = firstName;
+    this.birthYear = birthYear;
+}
+
+PersonF.prototype.calcAge = function(){
+    console.log(2025 - this.birthYear);
+}
+
+const child = function(firstName,birthYear,course){
+    PersonF.call(this, firstName,birthYear)
+    this.course = course;
+}
+
+child.prototype = Object.create(PersonF.prototype);
+//! child.prototype = PersonF.prototype; this doesnt work at all
+child.prototype.introduce = function(){
+    console.log(`Hy My name is ${this.firstName} and i'm studiying ${this.course}`);
+}
+
+const hassan = new child('hassan',2005,'computer scines');
+
+hassan.introduce();
+hassan.calcAge()
+console.log(hassan.__proto__);
+console.log(hassan.__proto__.__proto__);
+console.log(hassan instanceof child);
+console.log(hassan instanceof PersonF);
+child.prototype.constructor = child;
+console.dir(child.prototype.constructor)
