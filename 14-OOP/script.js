@@ -416,7 +416,7 @@ EV.prototype.chargeBattery = function(chargeTo){
 
 EV.prototype.accelerate = function(){
     this.speed += 20;
-    this.charge -= 1;
+    this.charge --;
     console.log(`${this.make} going at ${this.speed} km/h, with a charge of ${this.charge}%`);
 }
 const Tesla = new EV('Tesla',120, 23)
@@ -428,3 +428,62 @@ console.log(Tesla.__proto__);
 Tesla.chargeBattery(90)
 Tesla.accelerate()
 Tesla.brak()
+
+
+
+// Class inheritance with ES6 classes
+
+class PersonEC{
+    constructor(fullName,birthYear){
+        this.fullName =fullName,
+        this.birthYear = birthYear
+    }
+
+    //* Instance method
+    //* Methods will be added to .prototype property
+    calcAge(){
+        return 2025 - this.birthYear
+    }
+
+    greet(){
+        console.log(`Hey ${this.fullName}`);
+    }
+
+    get country(){
+        return 'Egypt'
+    }
+
+    // set a property that alredy exists
+    set fullName(name){
+        if(name.includes(' ')) this._fullName = name
+        else alert('this is not a full name')
+    }
+    get fullName(){
+        return this._fullName
+    }
+
+    // ! Static Method
+    static hey(){
+        console.log('Hy there 👋🏿');
+    }
+}
+
+class studentEC extends PersonEC{
+    constructor(fullName,birthYear,course){
+        // ! this always need to happen first
+        super(fullName,birthYear);
+        this.course = course
+    }
+
+    introduce(){
+        console.log(`My name is ${this.fullName} im ${this.calcAge()} years old i'm studiying ${this.course}`);
+    }
+
+    calcAge(){
+        return 2026 - this.birthYear
+    }
+}
+
+const ahmadY = new studentEC('Ahmad yaser',2008,'cyber security');
+
+ahmadY.introduce()
