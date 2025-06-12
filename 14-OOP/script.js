@@ -487,3 +487,84 @@ class studentEC extends PersonEC{
 const ahmadY = new studentEC('Ahmad yaser',2008,'cyber security');
 
 ahmadY.introduce()
+
+
+// *Inheritance Between "Classes": Object.create
+
+const Person_Proto = {
+    in(firstName,birthYear){
+        this.firstName = firstName;
+        this.birthYear = birthYear;
+    },
+    calcAge(){
+        return 2025 - this.birthYear; 
+    }
+}
+
+const mustafa = Object.create(Person_Proto)
+console.log(mustafa);
+
+const student = Object.create(Person_Proto)
+student.in = function(firstName,birthYear,course){
+    Person_Proto.in.call(this,firstName,birthYear)
+    this.course = course;
+}
+student.introduce = function(){
+    console.log(`My name is ${this.firstName} im ${this.calcAge()} years old i'm studiying ${this.course}`);
+
+}
+console.log(student);
+
+const ali = Object.create(student);
+ali.in('Ali',2000,'farmecy')
+console.log(ali);
+ali.calcAge()
+ali.introduce()
+
+
+class Account{
+    
+    constructor(owner,currency,pin){
+        this.owner = owner;
+        this.currency = currency;
+        this.pin = pin;
+        this.movements = [];
+        this.locale = navigator.language;
+        console.log(`thanks for oppening an account ${owner}`);
+    }
+    
+    deposit(val){
+        this.movements.push(val)
+    }
+    
+    withdraw(val){
+        this.deposit(-val);
+    }
+
+    approveLone(val){
+        return true;
+    }
+
+    emplementLoan(val){
+        if(this.approveLone(val)){
+            this.deposit(val);
+            console.log('loan improved');
+        }
+    }
+    Balance(){
+        console.log(this.movements.reduce((acc,cur)=> acc + cur, 0));
+    }
+
+
+}
+
+const acc1 = new Account('Mehmed','USD',7191);
+
+acc1.deposit(345);
+acc1.deposit(145);
+acc1.deposit(645);
+acc1.withdraw(323);
+acc1.withdraw(32);
+acc1.emplementLoan(2000)
+acc1.Balance()
+console.log(acc1);
