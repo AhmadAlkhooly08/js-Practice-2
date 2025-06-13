@@ -552,13 +552,16 @@ class Account{
 
     get movements(){
         return this.#movements;
+        // Not chaininable
     }
     deposit(val){
         this.#movements.push(val)
+        return this;
     }
     
     withdraw(val){
         this.deposit(-val);
+        return this;
     }
 
     #approveLone(val){
@@ -570,6 +573,7 @@ class Account{
             this.deposit(val);
             console.log('loan improved');
         }
+        return this;
     }
     #Balance(){
         return this.#movements.reduce((acc,cur)=> acc + cur, 0);
@@ -582,11 +586,13 @@ class Account{
 
 const acc1 = new Account('Mehmed','USD',7191);
 
-acc1.deposit(345);
-acc1.deposit(145);
-acc1.deposit(645);
-acc1.withdraw(323);
-acc1.withdraw(32);
-acc1.emplementLoan(2000)
+acc1.deposit(345)
+    .deposit(645)
+    .deposit(145)
+    .withdraw(323)
+    .withdraw(32)
+    .emplementLoan(2000)
+    .movements();
+
 console.log(acc1.Balance());
 console.log(acc1);
