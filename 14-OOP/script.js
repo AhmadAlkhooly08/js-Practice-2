@@ -522,40 +522,62 @@ ali.calcAge()
 ali.introduce()
 
 
+
+// /////////////////////////////////////////
+//! Encapsulation: Private Class Fields and Methods
+
+    //? 1) Public Fields
+    //? 2) Private Fields
+    //* 3) Public Methods
+    //* 4) Private Methods
 class Account{
-    
+    //? 1) Public Fields
+    locale = navigator.language;
+    Bank = 'Bankist';
+
+    //? 2) Private Fields
+    #movements = [];
+    #pin;
     constructor(owner,currency,pin){
         this.owner = owner;
         this.currency = currency;
-        this.pin = pin;
-        this.movements = [];
-        this.locale = navigator.language;
+        this.#pin = pin;
+
+        // this.movements = [];
+        // this.locale = navigator.language;
         console.log(`thanks for oppening an account ${owner}`);
     }
     
+    // public interFace (API)
+
+    get movements(){
+        return this.#movements;
+    }
     deposit(val){
-        this.movements.push(val)
+        this.#movements.push(val)
     }
     
     withdraw(val){
         this.deposit(-val);
     }
 
-    approveLone(val){
+    #approveLone(val){
         return true;
     }
 
     emplementLoan(val){
-        if(this.approveLone(val)){
+        if(this.#approveLone(val)){
             this.deposit(val);
             console.log('loan improved');
         }
     }
-    Balance(){
-        console.log(this.movements.reduce((acc,cur)=> acc + cur, 0));
+    #Balance(){
+        return this.#movements.reduce((acc,cur)=> acc + cur, 0);
     }
 
-
+    get Balance(){
+       return this.#Balance;
+    }
 }
 
 const acc1 = new Account('Mehmed','USD',7191);
@@ -566,5 +588,5 @@ acc1.deposit(645);
 acc1.withdraw(323);
 acc1.withdraw(32);
 acc1.emplementLoan(2000)
-acc1.Balance()
+console.log(acc1.Balance());
 console.log(acc1);
