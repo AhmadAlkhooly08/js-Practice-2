@@ -21,15 +21,23 @@ if (navigator.geolocation) {
       const coords = [latitude, longitude];
       const map = L.map("map").setView(coords,13);
 
-      L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}", {
+      L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution:
           '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       }).addTo(map);
 
-      L.marker(coords)
+    //   L.marker(coords)
+    //     .addTo(map)
+    //     .bindPopup("current location")
+    //     .openPopup();
+      map.on('click',function(e){
+        const {lat,lng} = e.latlng;
+        console.log(lat,lng);
+        L.marker([lat,lng])
         .addTo(map)
-        .bindPopup("current location")
+        .bindPopup(L.popup({}))
         .openPopup();
+      })  
     },
     function () {
       alert("couldnt accsess your position");
