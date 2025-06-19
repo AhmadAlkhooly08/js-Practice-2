@@ -11,19 +11,21 @@ const inputDuration = document.querySelector(".form__input--duration");
 const inputCadence = document.querySelector(".form__input--cadence");
 const inputElevation = document.querySelector(".form__input--elevation");
 
-let map,clicked;
+// let map,clicked;
 
 class App{
+
+    #map;
+    #clicked;
     constructor(){
         this._getPosition();
-        this._loadMap();
         this._showForm();
         this._toggleElavationField();
     }
 
     _getPosition(){
         if (navigator.geolocation){
-            navigator.geolocation.getCurrentPosition(this._loadMap,function () {
+            navigator.geolocation.getCurrentPosition(this._loadMap.bind(this),function () {
                 alert("couldnt accsess your position");
               })
           }
@@ -36,31 +38,31 @@ class App{
         console.log(`https://www.google.com/maps/@${latitude},${longitude}`);
     
         const coords = [latitude, longitude];
-            map = L.map("map").setView(coords,13);
+        this.#map = L.map("map").setView(coords,13);
     
         L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
             attribution:
             '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-        }).addTo(map);
+        }).addTo(this.#map);
     
         // & Handlingclicks on map
-        map.on('click',function(e){
+        this.#map.on('click',(e)=>{
             const {lat,lng} = e.latlng;
-            clicked = [lat,lng];
+            this.#clicked = [lat,lng];
             form.classList.remove('hidden');
             inputDistance.focus();
         })       
     }
 
     _showForm(){
-        form.addEventListener('submit',function(e){
+        form.addEventListener('submit',(e)=>{
             e.preventDefault();
         
             // clear input fields
             form.reset()
             // Display Marker
-            L.marker(this.clicked)
-            .addTo(map)
+            L.marker(this.#clicked)
+            .addTo(this.#map)
             .bindPopup(L.popup({
                 maxWidth:200,
                 minWidth:100,
