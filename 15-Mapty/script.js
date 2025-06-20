@@ -11,24 +11,76 @@ const inputDuration = document.querySelector(".form__input--duration");
 const inputCadence = document.querySelector(".form__input--cadence");
 const inputElevation = document.querySelector(".form__input--elevation");
 
-// let map,clicked;
 
+class Workout{
+    
+    date = new Date();
+    #id = (Date.now() + '').slice(-12);
+
+    constructor(coords,distance,duration){
+        this.coords = coords;//[lat,lng]
+        this.distance = distance;
+        this.duration = duration;
+    }
+
+}
+
+class Running extends Workout{
+    constructor(coords,distance,duration,cadence){
+        super(coords,distance,duration);
+        this.cadence = cadence;
+        this.calcPace();
+    }
+
+    calcPace(){
+        // min/km
+        this.pace = this.duration / this.distance;
+        return this.pace;
+    }
+}
+
+class Cycling extends Workout{
+    constructor(coords,distance,duration,elavation){
+        super(coords,distance,duration);
+        this.elavation = elavation;
+        this.calcSpeed();
+    }
+
+    calcSpeed(){
+        // km/h
+        this.speed = this.distance / (this.duration / 60);
+        return this.speed;
+    }
+}
+
+const run = new Running([8,9],20,5,20)
+
+console.log(run);
+
+const cycle = new Cycling([53,87],65,20,200)
+
+console.log(cycle);
+
+/////////////////////////////////////////////////
+////////////////////////////////////////
+//! App Arcitecture
 class App{
 
     #map;
     #clicked;
     constructor(){
         this._getPosition();
-        this._showForm();
-        this._toggleElavationField();
+        form.addEventListener('submit',this._newWorkout.bind(this))        
+        inputType.addEventListener('change',this._toggleElavationField)
+
     }
 
     _getPosition(){
         if (navigator.geolocation){
             navigator.geolocation.getCurrentPosition(this._loadMap.bind(this),function () {
                 alert("couldnt accsess your position");
-              })
-          }
+            })
+        }
           
     }
 
@@ -46,44 +98,44 @@ class App{
         }).addTo(this.#map);
     
         // & Handlingclicks on map
-        this.#map.on('click',(e)=>{
-            const {lat,lng} = e.latlng;
-            this.#clicked = [lat,lng];
-            form.classList.remove('hidden');
-            inputDistance.focus();
-        })       
+        this.#map.on('click',this._showForm.bind(this))       
     }
 
-    _showForm(){
-        form.addEventListener('submit',(e)=>{
-            e.preventDefault();
-        
-            // clear input fields
-            form.reset()
-            // Display Marker
-            L.marker(this.#clicked)
-            .addTo(this.#map)
-            .bindPopup(L.popup({
-                maxWidth:200,
-                minWidth:100,
-                autoClose:false,
-                closeOnClick:false,
-                className: 'running-popup',
-            }))
-            .setPopupContent('Workout')
-            .openPopup();
-            
-            form.classList.add('hidden')
-        })        
+    _showForm(e){
+        const {lat,lng} = e.latlng;
+        this.#clicked = [lat,lng];
+        form.classList.remove('hidden');
+        inputDistance.focus();
+        // clear input fields
+        form.reset()
     }
 
     _toggleElavationField(){
-        inputType.addEventListener('change',function(){
-            inputElevation.closest('.form__row').classList.toggle('form__row--hidden')
-            inputCadence.closest('.form__row').classList.toggle('form__row--hidden')
-        })
+        inputElevation.closest('.form__row').classList.toggle('form__row--hidden')
+        inputCadence.closest('.form__row').classList.toggle('form__row--hidden')
     }
     
+    _newWorkout(e){
+        e.preventDefault();
+        
+        // Display Marker
+        L.marker(this.#clicked)
+        .addTo(this.#map)
+        .bindPopup(L.popup({
+            maxWidth:200,
+            minWidth:100,
+            autoClose:false,
+            closeOnClick:false,
+            className: 'running-popup',
+        }))
+        .setPopupContent('Workout')
+        .openPopup();
+        
+        form.classList.add('hidden')
+
+    }
 }
 
 const OOP = new App();
+
+
