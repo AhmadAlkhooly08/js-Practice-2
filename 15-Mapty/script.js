@@ -53,21 +53,15 @@ class Cycling extends Workout{
     }
 }
 
-const run = new Running([8,9],20,5,20)
-
-console.log(run);
-
-const cycle = new Cycling([53,87],65,20,200)
-
-console.log(cycle);
-
-/////////////////////////////////////////////////
-////////////////////////////////////////
+//? /////////////////////////////////////////////
+//? //////////////////////////////////////
 //! App Arcitecture
 class App{
 
     #map;
     #clicked;
+    #workouts = [];
+    #type;
     constructor(){
         this._getPosition();
         form.addEventListener('submit',this._newWorkout.bind(this))        
@@ -107,7 +101,7 @@ class App{
         form.classList.remove('hidden');
         inputDistance.focus();
         // clear input fields
-        form.reset()
+        inputDuration.value = inputDistance.value = inputCadence.value = inputElevation.value = '' 
     }
 
     _toggleElavationField(){
@@ -118,6 +112,46 @@ class App{
     _newWorkout(e){
         e.preventDefault();
         
+        // Get data from form
+            let allData,check,workout;
+            this.#type = inputType.value;
+            const distanceData =  +inputDistance.value;
+            const durationData =  +inputDuration.value;
+            
+        // check if data is valid
+    
+        // if workout Running => Running object
+            if(this.#type === 'running'){
+                const cadenceData =  +inputCadence.value;
+                allData = [distanceData,durationData,cadenceData];
+
+                check = allData.every(val => val > 0 && Number.isFinite(val));
+                if (!check) return alert("You have to enter positive numbers");
+
+                workout = new Running(this.#clicked,...allData)
+            }
+            
+        // if workout cycling => cycling object
+            if(this.#type === 'cycling'){
+                const elavationData =  +inputElevation.value;
+                allData = [distanceData,durationData,elavationData];
+
+                check = allData.every(val => val > 0 && Number.isFinite(val));
+                if (!check) return alert("You have to enter positive numbers");
+
+                workout = new Cycling(this.#clicked,...allData)
+
+            }
+            
+        // Add new object to workout array
+            this.#workouts.push(workout)
+            console.log(this.#workouts);
+
+        // Runder workout on map as marker
+            if(check) this._renderWorkoutMarker();
+    }
+
+    _renderWorkoutMarker(){
         // Display Marker
         L.marker(this.#clicked)
         .addTo(this.#map)
@@ -126,13 +160,12 @@ class App{
             minWidth:100,
             autoClose:false,
             closeOnClick:false,
-            className: 'running-popup',
+            className: `${this.#type}-popup`,
         }))
-        .setPopupContent('Workout')
+        .setPopupContent(this.#type)
         .openPopup();
         
-        form.classList.add('hidden')
-
+        form.classList.add('hidden')    
     }
 }
 
