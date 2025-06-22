@@ -1,7 +1,5 @@
 "use strict";
 
-// prettier-ignore
-const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
 const form = document.querySelector(".form");
 const containerWorkouts = document.querySelector(".workouts");
@@ -10,26 +8,33 @@ const inputDistance = document.querySelector(".form__input--distance");
 const inputDuration = document.querySelector(".form__input--duration");
 const inputCadence = document.querySelector(".form__input--cadence");
 const inputElevation = document.querySelector(".form__input--elevation");
-
+const sideBar = document.querySelector('.sidebar')
 
 class Workout{
     
     date = new Date();
     #id = (Date.now() + '').slice(-12);
-
     constructor(coords,distance,duration){
         this.coords = coords;//[lat,lng]
         this.distance = distance;
         this.duration = duration;
     }
 
+    _setDeskreption(){
+        // prettier-ignore
+        const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+        this.description = `${this.type[0].toUpperCase()}${this.type.slice(1)} on ${months[this.date.getMonth()]} ${this.date.getDate()}`
+    }
 }
 
 class Running extends Workout{
+    type = 'running';
     constructor(coords,distance,duration,cadence){
         super(coords,distance,duration);
         this.cadence = cadence;
         this.calcPace();
+        this._setDeskreption()
     }
 
     calcPace(){
@@ -40,10 +45,12 @@ class Running extends Workout{
 }
 
 class Cycling extends Workout{
+    type = 'cycling';
     constructor(coords,distance,duration,elavation){
         super(coords,distance,duration);
         this.elavation = elavation;
         this.calcSpeed();
+        this._setDeskreption()
     }
 
     calcSpeed(){
@@ -61,7 +68,6 @@ class App{
     #map;
     #clicked;
     #workouts = [];
-    #type;
     constructor(){
         this._getPosition();
         form.addEventListener('submit',this._newWorkout.bind(this))        
@@ -104,6 +110,12 @@ class App{
         inputDuration.value = inputDistance.value = inputCadence.value = inputElevation.value = '' 
     }
 
+    _hideForm(){
+        inputDuration.value = inputDistance.value = inputCadence.value = inputElevation.value = '' 
+        form.style.display = 'none';
+        form.classList.add('hidden');
+        setTimeout(()=> form.style.display = 'grid',1000)
+    }
     _toggleElavationField(){
         inputElevation.closest('.form__row').classList.toggle('form__row--hidden')
         inputCadence.closest('.form__row').classList.toggle('form__row--hidden')
@@ -114,14 +126,14 @@ class App{
         
         // Get data from form
             let allData,check,workout;
-            this.#type = inputType.value;
+            let type = inputType.value;
             const distanceData =  +inputDistance.value;
             const durationData =  +inputDuration.value;
             
         // check if data is valid
     
         // if workout Running => Running object
-            if(this.#type === 'running'){
+            if(type === 'running'){
                 const cadenceData =  +inputCadence.value;
                 allData = [distanceData,durationData,cadenceData];
 
@@ -132,7 +144,7 @@ class App{
             }
             
         // if workout cycling => cycling object
-            if(this.#type === 'cycling'){
+            if(type === 'cycling'){
                 const elavationData =  +inputElevation.value;
                 allData = [distanceData,durationData,elavationData];
 
@@ -148,10 +160,16 @@ class App{
             console.log(this.#workouts);
 
         // Runder workout on map as marker
-            if(check) this._renderWorkoutMarker();
+            if(check) this._renderWorkoutMarker(workout);
+        
+        //Runder workout as List 
+            this._runderWorkoutList(workout)
+         
+        //Hide form
+            this._hideForm(); 
     }
 
-    _renderWorkoutMarker(){
+    _renderWorkoutMarker(workout){
         // Display Marker
         L.marker(this.#clicked)
         .addTo(this.#map)
@@ -160,12 +178,65 @@ class App{
             minWidth:100,
             autoClose:false,
             closeOnClick:false,
-            className: `${this.#type}-popup`,
+            className: `${workout.type}-popup`,
         }))
-        .setPopupContent(this.#type)
+        .setPopupContent(`${workout.type === 'running' ? '🏃‍♂️' : '🚴‍♀️'} ${workout.description}`)
         .openPopup();
         
-        form.classList.add('hidden')    
+    }
+
+    _runderWorkoutList(workout){
+
+        let Html=`
+            <li class="workout workout--${workout.type}" data-id="1234567890">
+            <h2 class="workout__title">${workout.description}</h2>
+            <div class="workout__details">
+                <span class="workout__icon">${workout.type === 'running' ? '🏃‍♂️' : '🚴‍♀️'}</span>
+                <span class="workout__value">${workout.distance}</span>
+                <span class="workout__unit">km</span>
+            </div>
+            <div class="workout__details">
+                <span class="workout__icon">⏱</span>
+                <span class="workout__value">${workout.duration}</span>
+                <span class="workout__unit">min</span>
+            </div>
+        `;
+
+        if(workout.type === 'running'){
+            Html += `
+                <div class="workout__details">
+                    <span class="workout__icon">⚡️</span>
+                    <span class="workout__value">${workout.pace.toFixed(1)}</span>
+                    <span class="workout__unit">min/km</span>
+                </div>
+                <div class="workout__details">
+                    <span class="workout__icon">🦶🏼</span>
+                    <span class="workout__value">${workout.cadence}</span>
+                    <span class="workout__unit">spm</span>
+                </div>
+            </li> 
+
+            `
+        }
+
+        if(workout.type === 'cycling'){
+            Html += `
+                <div class="workout__details">
+                    <span class="workout__icon">⚡️</span>
+                    <span class="workout__value">${workout.speed.toFixed(1)}</span>
+                    <span class="workout__unit">km/h</span>
+                </div>
+                <div class="workout__details">
+                    <span class="workout__icon">⛰</span>
+                    <span class="workout__value">${workout.elavation}</span>
+                    <span class="workout__unit">m</span>
+                </div>
+                </li> 
+            `;
+        }
+
+        form.insertAdjacentHTML("afterend",Html)
+
     }
 }
 
