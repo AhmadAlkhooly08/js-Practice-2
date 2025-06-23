@@ -13,7 +13,8 @@ const sideBar = document.querySelector('.sidebar')
 class Workout{
     
     date = new Date();
-    #id = (Date.now() + '').slice(-12);
+    #id = Math.floor(100000 + Math.random() * 900000);
+    clicks = 0;
     constructor(coords,distance,duration){
         this.coords = coords;//[lat,lng]
         this.distance = distance;
@@ -25,6 +26,13 @@ class Workout{
         const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
         this.description = `${this.type[0].toUpperCase()}${this.type.slice(1)} on ${months[this.date.getMonth()]} ${this.date.getDate()}`
+    }
+    get id(){
+        return this.#id;
+    }
+
+    click(){
+        this.clicks++;
     }
 }
 
@@ -72,7 +80,7 @@ class App{
         this._getPosition();
         form.addEventListener('submit',this._newWorkout.bind(this))        
         inputType.addEventListener('change',this._toggleElavationField)
-
+        containerWorkouts.addEventListener('click',this._MoveToMarker.bind(this));
     }
 
     _getPosition(){
@@ -167,6 +175,7 @@ class App{
          
         //Hide form
             this._hideForm(); 
+        
     }
 
     _renderWorkoutMarker(workout){
@@ -188,7 +197,7 @@ class App{
     _runderWorkoutList(workout){
 
         let Html=`
-            <li class="workout workout--${workout.type}" data-id="1234567890">
+            <li class="workout workout--${workout.type}" data-id='${workout.id}'>
             <h2 class="workout__title">${workout.description}</h2>
             <div class="workout__details">
                 <span class="workout__icon">${workout.type === 'running' ? '🏃‍♂️' : '🚴‍♀️'}</span>
@@ -237,6 +246,24 @@ class App{
 
         form.insertAdjacentHTML("afterend",Html)
 
+    }
+
+    _MoveToMarker(e){
+        
+        const workoutEl = e.target.closest('.workout');
+        if (!workoutEl) return;
+
+        const Moveworkout = this.#workouts.find(work => work.id === +workoutEl.dataset.id
+        )
+
+        if (!Moveworkout) return;
+
+        this.#map.flyTo(Moveworkout.coords, 13, {
+            animate: true,
+            duration: 1,
+        });
+
+        Moveworkout.click();
     }
 }
 
