@@ -83,6 +83,7 @@ class App {
   #mapZoomLevel = 13;
   #mapEvent;
   #workouts = [];
+  #editingWorkout = null;
 
   constructor() {
     // Get user's position
@@ -158,6 +159,7 @@ class App {
 
     e.preventDefault();
 
+    if (!this.#mapEvent) return;
     // Get data from form
     const type = inputType.value;
     const distance = +inputDistance.value;
@@ -195,8 +197,19 @@ class App {
       workout = new Cycling([lat, lng], distance, duration, elevation);
     }
 
-    // Add new object to workout array
-    this.#workouts.push(workout);
+    if(this.#editingWorkout){
+      const index = this.#workouts.findIndex(w=>{
+        return w.id === this.#editingWorkout.id;
+      })
+      workout.id = this.#editingWorkout.id;
+      this.#workouts[index] = workout;
+      
+      this.#editingWorkout = null;
+    }else{
+      // Add new object to workout array
+      this.#workouts.push(workout);
+    }
+
 
     // Render workout on map as marker
     this._renderWorkoutMarker(workout);
@@ -291,18 +304,52 @@ class App {
   _moveToPopup(e) {
     // BUGFIX: When we click on a workout before the map has loaded, we get an error. But there is an easy fix:
     if (!this.#map) return;
-
+    let dropDown;
     if(e.target.classList.contains('dot-button')){
-      const dropDown = document.querySelector('.dropdown')
+      dropDown = e.target.nextElementSibling;
       dropDown.classList.toggle('hidden');
       return
     }
     const workoutEl = e.target.closest('.workout');
 
     if(e.target.classList.contains('dropdown__item') && e.target.classList.contains('edit')){
-      // form.classList.remove('hidden');
+      const workoutElEdit = e.target.closest('.workout');
+      if(!workoutElEdit) return;
+
+      
+      const workoutEdit = this.#workouts.find(work =>{
+        return work.id === +workoutElEdit.dataset.id;
+      });
+      if(!workoutEdit) return;
+      form.classList.remove('hidden')
+      inputType.value = workoutEdit.type;
+      inputDuration.value = workoutEdit.duration;
+      inputDistance.value = workoutEdit.distance
+
+      this.#mapEvent ={
+        latlng: {
+          lat: workoutEdit.coords[0],
+          lng: workoutEdit.coords[1],
+        },
+      }
+
+      if(workoutEdit.type === 'running'){
+        inputCadence.value = workoutEdit.cadence;
+
+        inputElevation.closest('.form__row').classList.add('form__row--hidden');
+        inputCadence.closest('.form__row').classList.remove('form__row--hidden');
+      }
+      if(workoutEdit.type === 'cycling'){
+        inputElevation.value = workoutEdit.elevationGain;
+        inputCadence.closest('.form__row').classList.add('form__row--hidden')
+        inputElevation.closest('.form__row').classList.remove('form__row--hidden')
+      }
+
+      this.#editingWorkout = workoutEdit;
+      workoutElEdit.remove();
 
     }
+
     if(e.target.classList.contains('dropdown__item') && e.target.classList.contains('delete')){
       
 
@@ -335,8 +382,25 @@ class App {
 
     if (!data) return;
 
-    this.#workouts = data;
-    console.log(this.#workouts);
+    this.#workouts = data.map(obj => {
+      if (!obj || !obj.type) return null;
+      if (obj.type === 'running') {
+        const run = new Running(obj.coords, obj.distance, obj.duration, obj.cadence);
+        run.id = obj.id;
+        run.date = new Date(obj.date);
+        return run;
+      }
+  
+      if (obj.type === 'cycling') {
+        const cycle = new Cycling(obj.coords, obj.distance, obj.duration, obj.elevationGain);
+        cycle.id = obj.id;
+        cycle.date = new Date(obj.date);
+        return cycle;
+      }
+  
+      return null;
+    }).filter(Boolean); // remove any nulls
+  
     this.#workouts.forEach(work => {
       this._renderWorkout(work);
     });
