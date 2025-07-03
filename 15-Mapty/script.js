@@ -77,13 +77,15 @@ const inputCadence = document.querySelector('.form__input--cadence');
 const inputElevation = document.querySelector('.form__input--elevation');
 const btnHistory = document.querySelector('.btn-history ');
 const btnDropDown = document.querySelector('.dot-button');
-const dropdownMenu = document.querySelector('.dropdown')
+const btnSort = document.querySelector('.btn-sort');
 class App {
   #map;
   #mapZoomLevel = 13;
   #mapEvent;
   #workouts = [];
+  #workoutMarkers= [];
   #editingWorkout = null;
+  #sortAscending = true
 
   constructor() {
     // Get user's position
@@ -97,6 +99,7 @@ class App {
     inputType.addEventListener('change', this._toggleElevationField);
     containerWorkouts.addEventListener('click', this._moveToPopup.bind(this));
     btnHistory.addEventListener('click',this.reset.bind(this));
+    btnSort.addEventListener('click',this._sortWorkouts.bind(this))
   }
 
   _getPosition() {
@@ -203,8 +206,33 @@ class App {
       })
       workout.id = this.#editingWorkout.id;
       this.#workouts[index] = workout;
-      
+
+      // Add higlight on the editing workout
+
+      const smooth = document.querySelector(`.workout[data-id="${workout.id}"]`);
+      if(smooth){
+        smooth.classList.add('fade-out');
+
+        setTimeout(()=>{
+          smooth.remove();
+          this._renderWorkout(workout);
+
+          const highlight = document.querySelector(`.workout[data-id="${workout.id}"]`);
+          if(workout.type === 'running'){
+            highlight.classList.add('highlighted-running');
+            setTimeout(()=> highlight.classList.remove('highlighted-running'),2000)
+          }
+          if(workout.type === 'cycling'){
+            highlight.classList.add('highlighted-cycling');
+            setTimeout(()=> highlight.classList.remove('highlighted-cycling'),2000)
+          }    
+        },300);
+      }
       this.#editingWorkout = null;
+
+      this._hideForm();
+      this._setLocalStorage();
+      return;
     }else{
       // Add new object to workout array
       this.#workouts.push(workout);
@@ -225,21 +253,24 @@ class App {
   }
 
   _renderWorkoutMarker(workout) {
+   const marker = 
     L.marker(workout.coords)
-      .addTo(this.#map)
-      .bindPopup(
-        L.popup({
-          maxWidth: 250,
-          minWidth: 100,
-          autoClose: false,
-          closeOnClick: false,
-          className: `${workout.type}-popup`,
-        })
-      )
-      .setPopupContent(
-        `${workout.type === 'running' ? '🏃‍♂️' : '🚴‍♀️'} ${workout.description}`
-      )
-      .openPopup();
+    .addTo(this.#map)
+    .bindPopup(
+      L.popup({
+        maxWidth: 250,
+        minWidth: 100,
+        autoClose: false,
+        closeOnClick: false,
+        className: `${workout.type}-popup`,
+      })
+    )
+    .setPopupContent(
+      `${workout.type === 'running' ? '🏃‍♂️' : '🚴‍♀️'} ${workout.description}`
+    )
+    .openPopup(); 
+    
+    this.#workoutMarkers.push({id:workout.id,marker})
   }
 
   _renderWorkout(workout) {
@@ -310,7 +341,6 @@ class App {
       dropDown.classList.toggle('hidden');
       return
     }
-    const workoutEl = e.target.closest('.workout');
 
     if(e.target.classList.contains('dropdown__item') && e.target.classList.contains('edit')){
       const workoutElEdit = e.target.closest('.workout');
@@ -322,6 +352,9 @@ class App {
       });
       if(!workoutEdit) return;
       form.classList.remove('hidden')
+      inputDistance.focus();
+      this._threeDotBtn();
+
       inputType.value = workoutEdit.type;
       inputDuration.value = workoutEdit.duration;
       inputDistance.value = workoutEdit.distance
@@ -346,15 +379,29 @@ class App {
       }
 
       this.#editingWorkout = workoutEdit;
-      workoutElEdit.remove();
 
     }
 
     if(e.target.classList.contains('dropdown__item') && e.target.classList.contains('delete')){
-      
+      const selectWorkout = e.target.closest('.workout');
+      if(!selectWorkout) return;
 
+      const find = this.#workouts.findIndex((workout) =>{
+        return workout.id === +selectWorkout.dataset.id;
+      });
+      const findMarker = this.#workoutMarkers.findIndex((marker)=>{
+        return marker.id === this.#workouts[find].id;
+      })
+      selectWorkout.classList.add('fade-out')
+      setTimeout(()=> selectWorkout.remove(),2000);
+      this.#workoutMarkers[findMarker].marker.remove();
+      this.#workoutMarkers.splice(findMarker,1);
+      this.#workouts.splice(find,1);
+      this._setLocalStorage();
+      return;
     }
 
+    const workoutEl = e.target.closest('.workout');
     if (!workoutEl) return;
 
     const workout = this.#workouts.find(
@@ -411,7 +458,26 @@ class App {
   }
 
   _threeDotBtn(){
-    dropdownMenu.classList.toggle('hidden');
+    const dropdownMenu = document.querySelectorAll('.dropdown');
+    dropdownMenu.forEach(menu => menu.classList.add('hidden'));
+  }
+
+  _sortWorkouts(e){
+    this.#sortAscending = !this.#sortAscending;
+
+    this.#workouts.sort((a,b) => this.#sortAscending ? b.distance - a.distance : a.distance - b.distance);
+    console.log(this.#workouts);
+    
+    document.querySelectorAll('.workout').forEach(el=> el.remove());
+
+    this.#workouts
+      .filter(run=> run.type === 'running' )
+      .forEach(work => this._renderWorkout(work));
+
+    this.#workouts
+      .filter(cycle=> cycle.type === 'cycling' )
+      .forEach(work => this._renderWorkout(work));
+  
   }
 }
 
