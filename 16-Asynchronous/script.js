@@ -2,6 +2,9 @@
 
 const btn = document.querySelector('.btn-country');
 const countriesContainer = document.querySelector('.countries');
+const inputInformation = document.querySelector('.input');
+const form = document.querySelector('.information');
+const back = document.querySelector('.remove');
 
 ///////////////////////////////////////
 
@@ -12,8 +15,7 @@ const countriesContainer = document.querySelector('.countries');
 
 //     request.addEventListener('load',() => {
 //         const [data] = JSON.parse(request.responseText);
-//         console.log(data);
-        
+//         console.log(data);       
 //         const html = `
 //         <article class="country">
 //             <img class="country__img" src="${data.flag}" />
@@ -55,34 +57,71 @@ const renderCard = function(data, neghbor = ''){
         countriesContainer.style.opacity = 1;
 
 }
-function countieandNeghibor(country){
-    // Ajax call country 1
-    const request = new XMLHttpRequest();
-    request.open('GET', `https://restcountries.com/v2/name/${country}`);
-    request.send();
 
-    request.addEventListener('load',() => {
-        const [data] = JSON.parse(request.responseText);
-        console.log(data);
+//! displaying neighbor country
+// function countieandNeghibor(country){
+//     // Ajax call country 1
+//     const request = new XMLHttpRequest();
+//     request.open('GET', `https://restcountries.com/v2/name/${country}`);
+//     request.send();
+
+//     request.addEventListener('load',() => {
+//         const [data] = JSON.parse(request.responseText);
+//         console.log(data);
         
-        // Render country
-        renderCard(data);
+//         // Render country
+//         renderCard(data);
 
-        // get neghibor country
+//         // get neghibor country
 
-        // Ajax call country 1
-        const neghiborcountry = data?.borders[0];
-        const request2 = new XMLHttpRequest();
-        request2.open('GET', `https://restcountries.com/v2/alpha/${neghiborcountry}`);
-        request2.send();
+//         // Ajax call country 1
+//         const neghiborcountry = data?.borders[3];
+//         const request2 = new XMLHttpRequest();
+//         request2.open('GET', `https://restcountries.com/v2/alpha/${neghiborcountry}`);
+//         request2.send();
 
-        request2.addEventListener('load',function(){
-            const data2 = JSON.parse(request2.responseText);
-            renderCard(data2,'neighbour')
-        })
-    })
-}
+//         request2.addEventListener('load',function(){
+//             const data2 = JSON.parse(request2.responseText);
+//             renderCard(data2,'neighbour')
+//         })
+//     })
+// }
 
 // countieandNeghibor('jordan');
 // countieandNeghibor('turkey');
-countieandNeghibor('saudi arabia');
+// countieandNeghibor('saudi arabia');
+
+
+//! Promises and the Fetch API
+
+// const getCountryData = function(country){
+//     fetch(`https://restcountries.com/v2/name/${country}`).then(function(promise){
+//         console.log(promise);
+//         return promise.json();
+//     }).then(function(data){
+//         console.log(data);
+//         renderCard(data[0]);
+//     })
+// }
+const getCountryData = function(country){
+    fetch(`https://restcountries.com/v2/name/${country}`)
+    .then((promise) => promise.json())
+    .then((data) => renderCard(data[0]))
+}
+
+back.addEventListener('click',function(e){
+    e.preventDefault();
+    countriesContainer.innerHTML = '';
+    form.classList.remove('hidden');
+    back.classList.add('hidden');
+    inputInformation.value = '';
+})
+form.addEventListener('submit',function(e){
+    e.preventDefault();
+    const country = inputInformation.value;
+    if(!country) return;
+
+    form.classList.add('hidden')
+    getCountryData(country);
+    back.classList.remove('hidden');
+})

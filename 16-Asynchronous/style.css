@@ -124,3 +124,41 @@ body {
   border: 3rem solid white;
   box-shadow: 0 2rem 5rem 1rem rgba(0, 0, 0, 0.1);
 }
+
+.information{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.information .text{
+  color: #555;
+  padding: 30px;
+}
+
+.information .input {
+  width: 250px;
+  border-radius: 8px;
+  box-shadow: none;
+  padding: 7px;
+  border: 1px solid #ccc;
+  margin-top: 10px;
+}
+
+.hidden{
+  display: none;
+}
+.remove .hidden{
+  display: none;
+}
+.remove{
+  background-color: #6d6d6d;
+  color: white;
+  box-shadow: none;
+  border: 1px solid #7a7979;
+  padding: 6px;
+  border-radius: 5px;
+  margin: 20px;
+}
+
