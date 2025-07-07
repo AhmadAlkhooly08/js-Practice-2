@@ -5,6 +5,31 @@ const countriesContainer = document.querySelector('.countries');
 const inputInformation = document.querySelector('.input');
 const form = document.querySelector('.information');
 const back = document.querySelector('.remove');
+inputInformation.focus();
+
+const renderCard = function(data, neghbor = ''){
+    const html = `
+        <article class="country ${neghbor}">
+            <img class="country__img" src="${data.flag}" />
+            <div class="country__data">
+            <h3 class="country__name">${data.name}</h3>
+            <h4 class="country__region">${data.region}</h4>
+            <p class="country__row"><span>👫</span>${(+data.population / 1000000).toFixed(1)}M people</p>
+            <p class="country__row"><span>🗣️</span>${data.languages[0].name}</p>
+            <p class="country__row"><span>💰</span>${data.currencies[0].name}</p>
+            </div>
+        </article>
+
+    `;
+        countriesContainer.insertAdjacentHTML("beforeend",html);
+        // countriesContainer.style.opacity = 1;
+
+}
+
+const renderError = function(msg){
+    countriesContainer.insertAdjacentText("beforeend",msg);
+    // countriesContainer.style.opacity = 1;
+}
 
 ///////////////////////////////////////
 
@@ -39,24 +64,6 @@ const back = document.querySelector('.remove');
 // countrieCards('turkey');
 // countrieCards('saudi arabia');
 
-const renderCard = function(data, neghbor = ''){
-    const html = `
-        <article class="country ${neghbor}">
-            <img class="country__img" src="${data.flag}" />
-            <div class="country__data">
-            <h3 class="country__name">${data.name}</h3>
-            <h4 class="country__region">${data.region}</h4>
-            <p class="country__row"><span>👫</span>${(+data.population / 1000000).toFixed(1)}M people</p>
-            <p class="country__row"><span>🗣️</span>${data.languages[0].name}</p>
-            <p class="country__row"><span>💰</span>${data.currencies[0].name}</p>
-            </div>
-        </article>
-
-    `;
-        countriesContainer.insertAdjacentHTML("beforeend",html);
-        countriesContainer.style.opacity = 1;
-
-}
 
 //! displaying neighbor country
 // function countieandNeghibor(country){
@@ -106,7 +113,21 @@ const renderCard = function(data, neghbor = ''){
 const getCountryData = function(country){
     fetch(`https://restcountries.com/v2/name/${country}`)
     .then((promise) => promise.json())
-    .then((data) => renderCard(data[0]))
+    .then((data) =>{
+        renderCard(data[0])
+        const neighbor = data[0]?.borders[0];
+
+        return fetch(`https://restcountries.com/v2/alpha/${neighbor}`);
+    })
+    .then(promise => promise.json())
+    .then(data => renderCard(data,'neighbour'))
+    .catch((err) =>{
+        renderError(`Something went wrong 💥💥 ${err.message}. try again`)
+    })
+    .finally(() =>{
+        // ! the finally it works on the both sides then and catch
+        countriesContainer.style.opacity = 1;
+    })
 }
 
 back.addEventListener('click',function(e){
@@ -115,6 +136,7 @@ back.addEventListener('click',function(e){
     form.classList.remove('hidden');
     back.classList.add('hidden');
     inputInformation.value = '';
+    inputInformation.focus();
 })
 form.addEventListener('submit',function(e){
     e.preventDefault();
@@ -125,3 +147,9 @@ form.addEventListener('submit',function(e){
     getCountryData(country);
     back.classList.remove('hidden');
 })
+
+// btn.addEventListener('click',function(){
+//     form.classList.add('hidden')
+//     getCountryData('jordan');
+//     btn.classList.add('hidden');
+// })

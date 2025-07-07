@@ -159,6 +159,7 @@ body {
   border: 1px solid #7a7979;
   padding: 6px;
   border-radius: 5px;
-  margin: 20px;
+  position: relative;
+  top: 65px;
 }
 
