@@ -215,7 +215,6 @@ const getcountry = function(url,err =''){
         return promise.json();
     })
 }
-let coords;
 
 const whereAmI = function(lat,lng){
     getcountry(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}`,'coudnt reach to position')
@@ -260,3 +259,37 @@ Promise.resolve('Resolved Promise 1').then(res => console.log(res));
 //     console.log(res);
 // });
 console.log('Test End');
+
+
+// 
+
+const discountPromis = new Promise(function(resolve,reject){
+    console.log('checking for discounts');
+    setTimeout(() =>{
+        if(Math.random() * 1 <= 0.5){
+            resolve('congrajulations you won a discount')
+        }else{
+            reject(new Error('you did not won a discount'));
+        }
+
+    },2000);
+});
+
+discountPromis.then(res => console.log(res)).catch(err => console.error(err));
+
+const wait = function(sec){
+    return new Promise(resolve => {
+        setTimeout(() =>{
+            resolve()
+        },sec * 1000);
+    })
+}
+
+wait(2).then(res =>{
+    console.log('waited 2 seconds');
+    return wait(1)
+}).then(res => console.log('waited 1 second '));
+
+//! To let promise run immediatly with fullfield or reject
+Promise.resolve('abc').then(x => console.log(x)) 
+Promise.reject( new Error('!!!Problem')).catch(x => console.log(x)) 
