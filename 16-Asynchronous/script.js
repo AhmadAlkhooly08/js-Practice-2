@@ -216,37 +216,37 @@ const getcountry = function(url,err =''){
     })
 }
 
-const whereAmI = function(lat,lng){
-    getcountry(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}`,'coudnt reach to position')
-    .then(data => {
-        console.log(`you live in ${data.city},${data.countryName} adress: ${data.countryName},${data.city},Beylikduzu,${data.locality} with postcode:${data.postcode}`);  
-        const getdataposition = data.countryCode;
-        return getcountry(`https://restcountries.com/v2/alpha/${getdataposition}`,'coudnt find country')
-    })
-    .then(data => {
-        renderCard(data)
-    })
-    .catch(err =>{
-        renderError(`Something went wrong 💥💥 . try again`)
-    })
-    .finally(()=>{
-        countriesContainer.style.opacity = 1;
-    })
-}
-const position = function(){
-    navigator.geolocation.getCurrentPosition(positin =>{
-        const {latitude,longitude} = positin.coords;
-        console.log(latitude,longitude);
-        btn.addEventListener('click',function(){
-            btn.classList.add('hidden');
-            whereAmI(latitude,longitude);
-        })
+// const whereAmI = function(lat,lng){
+//     getcountry(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}`,'coudnt reach to position')
+//     .then(data => {
+//         console.log(`you live in ${data.city},${data.countryName} adress: ${data.countryName},${data.city},Beylikduzu,${data.locality} with postcode:${data.postcode}`);  
+//         const getdataposition = data.countryCode;
+//         return getcountry(`https://restcountries.com/v2/alpha/${getdataposition}`,'coudnt find country')
+//     })
+//     .then(data => {
+//         renderCard(data)
+//     })
+//     .catch(err =>{
+//         renderError(`Something went wrong 💥💥 . try again`)
+//     })
+//     .finally(()=>{
+//         countriesContainer.style.opacity = 1;
+//     })
+// }
+// const position = function(){
+//     navigator.geolocation.getCurrentPosition(positin =>{
+//         const {latitude,longitude} = positin.coords;
+//         console.log(latitude,longitude);
+//         btn.addEventListener('click',function(){
+//             btn.classList.add('hidden');
+//             whereAmI(latitude,longitude);
+//         })
         
-    },()=>{
-        console.error('position undefiend');
-    });
-}
-position();
+//     },()=>{
+//         console.error('position undefiend');
+//     });
+// }
+// position();
 
 
 // The Event Loop in Practice
@@ -263,33 +263,133 @@ console.log('Test End');
 
 // 
 
-const discountPromis = new Promise(function(resolve,reject){
-    console.log('checking for discounts');
-    setTimeout(() =>{
-        if(Math.random() * 1 <= 0.5){
-            resolve('congrajulations you won a discount')
-        }else{
-            reject(new Error('you did not won a discount'));
-        }
+// const discountPromis = new Promise(function(resolve,reject){
+//     console.log('checking for discounts');
+//     setTimeout(() =>{
+//         if(Math.random() * 1 <= 0.5){
+//             resolve('congrajulations you won a discount')
+//         }else{
+//             reject(new Error('you did not won a discount'));
+//         }
 
-    },2000);
-});
+//     },2000);
+// });
 
-discountPromis.then(res => console.log(res)).catch(err => console.error(err));
+// discountPromis.then(res => console.log(res)).catch(err => console.error(err));
 
-const wait = function(sec){
-    return new Promise(resolve => {
-        setTimeout(() =>{
-            resolve()
-        },sec * 1000);
+// const wait = function(sec){
+//     return new Promise(resolve => {
+//         setTimeout(() =>{
+//             resolve()
+//         },sec * 1000);
+//     })
+// }
+
+// wait(2).then(res =>{
+//     console.log('waited 2 seconds');
+//     return wait(1)
+// }).then(res => console.log('waited 1 second '));
+
+//! To let promise run immediatly with fullfield or reject
+// Promise.resolve('abc').then(x => console.log(x)) 
+// Promise.reject( new Error('!!!Problem')).catch(x => console.log(x)) 
+
+
+// !Promisifying the Geolocation API
+
+const getPosition = function(){
+    return new Promise(function(resolve,reject){
+        // navigator.geolocation.getCurrentPosition(
+        //     position => console.log(resolve(position)),
+        //     err => console.error(reject(err))
+        // );
+        navigator.geolocation.getCurrentPosition(resolve,reject);      
     })
 }
 
-wait(2).then(res =>{
-    console.log('waited 2 seconds');
-    return wait(1)
-}).then(res => console.log('waited 1 second '));
+const renderWhere = function(){
+    getPosition()
+    .then(res => {
+        const {latitude,longitude} = res.coords;
+        console.log(latitude,longitude);
+        return fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}`)
+    })
+    .then(promise => promise.json())
+    .then(data => {
+        console.log(data);
+        const countryCode = data.countryCode;
+        return fetch(`https://restcountries.com/v2/alpha/${countryCode}`)
+    })
+    .then(res => res.json())
+    .then(data =>{
+        btn.classList.add('hidden');
+        renderCard(data);
+    })
+    .catch(err => console.error(err))
+    .finally(()=> countriesContainer.style.opacity = 1)
+};
 
-//! To let promise run immediatly with fullfield or reject
-Promise.resolve('abc').then(x => console.log(x)) 
-Promise.reject( new Error('!!!Problem')).catch(x => console.log(x)) 
+btn.addEventListener('click',renderWhere);
+btn.classList.add('hidden');
+
+///////////////////////////////////////
+// Coding Challenge #2
+
+/* 
+Build the image loading functionality that I just showed you on the screen.
+
+Tasks are not super-descriptive this time, so that you can figure out some stuff on your own. Pretend you're working on your own 😉
+
+PART 1
+1. Create a function 'createImage' which receives imgPath as an input. This function returns a promise which creates a new image (use document.createElement('img')) and sets the .src attribute to the provided image path. When the image is done loading, append it to the DOM element with the 'images' class, and resolve the promise. The fulfilled value should be the image element itself. In case there is an error loading the image ('error' event), reject the promise.
+
+If this part is too tricky for you, just watch the first part of the solution.
+
+PART 2
+2. Comsume the promise using .then and also add an error handler;
+3. After the image has loaded, pause execution for 2 seconds using the wait function we created earlier;
+4. After the 2 seconds have passed, hide the current image (set display to 'none'), and load a second image (HINT: Use the image element returned by the createImage promise to hide the current image. You will need a global variable for that 😉);
+5. After the second image has loaded, pause execution for 2 seconds again;
+6. After the 2 seconds have passed, hide the current image.
+
+TEST DATA: Images in the img folder. Test the error handler by passing a wrong image path. Set the network speed to 'Fast 3G' in the dev tools Network tab, otherwise images load too fast.
+
+GOOD LUCK 😀
+*/
+
+let img;
+const createImage = function(imgPath){
+    return new Promise(function(resolve,reject){
+        img = document.createElement('img');
+        img.src = imgPath;
+        img.addEventListener('load',function(e){
+            const father = document.querySelector('.images')
+            father.insertAdjacentElement('beforeend',img);
+            father.style.opacity = 1;
+            resolve();
+        })
+
+        img.addEventListener('error',function(e){
+            reject(new Error('something wrong happend'))
+        }) 
+    })
+}
+
+const wait = function(imge){
+    return new Promise(function(resolve,reject){
+        setTimeout(()=> resolve() ,2000);
+
+    })
+}
+createImage('./img/img-1.jpg')
+.then(res => {
+   wait()
+   img.style.display = 'none';
+   return createImage('./img/img-2.jpg')
+}).then(res =>{
+    wait()
+    img.style.display = 'none';
+     return createImage('./img/img-3.jpg')
+}).then(res => wait())
+.catch(er => console.log(er));
+
