@@ -163,3 +163,15 @@ body {
   top: 65px;
 }
 
+.btns{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  padding: 20px;
+}
+
+.btns h1{
+  color: #555;
+  padding-bottom: 20px;
+}

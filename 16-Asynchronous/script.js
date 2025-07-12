@@ -5,6 +5,7 @@ const countriesContainer = document.querySelector('.countries');
 const inputInformation = document.querySelector('.input');
 const form = document.querySelector('.information');
 const back = document.querySelector('.remove');
+const h1 = document.querySelector('.h1');
 inputInformation.focus();
 
 const renderCard = function(data, neghbor = ''){
@@ -22,13 +23,13 @@ const renderCard = function(data, neghbor = ''){
 
     `;
         countriesContainer.insertAdjacentHTML("beforeend",html);
-        // countriesContainer.style.opacity = 1;
+        countriesContainer.style.opacity = 1;
 
 }
 
 const renderError = function(msg){
     countriesContainer.insertAdjacentText("beforeend",msg);
-    // countriesContainer.style.opacity = 1;
+    countriesContainer.style.opacity = 1;
 }
 
 ///////////////////////////////////////
@@ -207,14 +208,14 @@ TEST COORDINATES 2: -33.933, 18.474
 GOOD LUCK 😀
 */
 
-const getcountry = function(url,err =''){
-    return fetch(url).then(promise =>{
-        if(!promise.ok){
-            throw new Error(`${err}`)
-        }
-        return promise.json();
-    })
-}
+// const getcountry = function(url,err =''){
+//     return fetch(url).then(promise =>{
+//         if(!promise.ok){
+//             throw new Error(`${err}`)
+//         }
+//         return promise.json();
+//     })
+// }
 
 // const whereAmI = function(lat,lng){
 //     getcountry(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}`,'coudnt reach to position')
@@ -251,14 +252,14 @@ const getcountry = function(url,err =''){
 
 // The Event Loop in Practice
 
-console.log('Teste Start');
-setTimeout(()=> console.log('0 seconds passed'),0);
-Promise.resolve('Resolved Promise 1').then(res => console.log(res));
+// console.log('Teste Start');
+// setTimeout(()=> console.log('0 seconds passed'),0);
+// Promise.resolve('Resolved Promise 1').then(res => console.log(res));
 // Promise.resolve('Resolved Promise 2').then(res =>{
 //     for(let i =0; i < 10000; i++){}
 //     console.log(res);
 // });
-console.log('Test End');
+// console.log('Test End');
 
 
 // 
@@ -297,40 +298,39 @@ console.log('Test End');
 
 // !Promisifying the Geolocation API
 
-const getPosition = function(){
-    return new Promise(function(resolve,reject){
-        // navigator.geolocation.getCurrentPosition(
-        //     position => console.log(resolve(position)),
-        //     err => console.error(reject(err))
-        // );
-        navigator.geolocation.getCurrentPosition(resolve,reject);      
-    })
-}
+// const getPosition = function(){
+//     return new Promise(function(resolve,reject){
+//         // navigator.geolocation.getCurrentPosition(
+//         //     position => console.log(resolve(position)),
+//         //     err => console.error(reject(err))
+//         // );
+//         navigator.geolocation.getCurrentPosition(resolve,reject);      
+//     })
+// }
 
-const renderWhere = function(){
-    getPosition()
-    .then(res => {
-        const {latitude,longitude} = res.coords;
-        console.log(latitude,longitude);
-        return fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}`)
-    })
-    .then(promise => promise.json())
-    .then(data => {
-        console.log(data);
-        const countryCode = data.countryCode;
-        return fetch(`https://restcountries.com/v2/alpha/${countryCode}`)
-    })
-    .then(res => res.json())
-    .then(data =>{
-        btn.classList.add('hidden');
-        renderCard(data);
-    })
-    .catch(err => console.error(err))
-    .finally(()=> countriesContainer.style.opacity = 1)
-};
+// const renderWhere = function(){
+//     getPosition()
+//     .then(res => {
+//         const {latitude,longitude} = res.coords;
+//         console.log(latitude,longitude);
+//         return fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}`)
+//     })
+//     .then(promise => promise.json())
+//     .then(data => {
+//         console.log(data);
+//         const countryCode = data.countryCode;
+//         return fetch(`https://restcountries.com/v2/alpha/${countryCode}`)
+//     })
+//     .then(res => res.json())
+//     .then(data =>{
+//         btn.classList.add('hidden');
+//         renderCard(data);
+//     })
+//     .catch(err => console.error(err))
+//     .finally(()=> countriesContainer.style.opacity = 1)
+// };
 
-btn.addEventListener('click',renderWhere);
-btn.classList.add('hidden');
+// btn.addEventListener('click',renderWhere);
 
 ///////////////////////////////////////
 // Coding Challenge #2
@@ -357,39 +357,93 @@ TEST DATA: Images in the img folder. Test the error handler by passing a wrong i
 GOOD LUCK 😀
 */
 
-let img;
-const createImage = function(imgPath){
-    return new Promise(function(resolve,reject){
-        img = document.createElement('img');
-        img.src = imgPath;
-        img.addEventListener('load',function(e){
-            const father = document.querySelector('.images')
-            father.insertAdjacentElement('beforeend',img);
-            father.style.opacity = 1;
-            resolve();
-        })
+// const createImage = function(imglink){
+//     return new Promise(function(resolve,reject){
+//         const img = document.createElement('img');
+//         img.src = imglink;
+//         img.addEventListener('load',function(){
+//             const father = document.querySelector('.images');
+//             father.append(img);
+            
+//             resolve(img);
+//         });
+        
+//         img.addEventListener('error',function(){
+//             reject(new Error('somthing went wrong while loading the image'))
+//         })
+//     })
+// }
 
-        img.addEventListener('error',function(e){
-            reject(new Error('something wrong happend'))
-        }) 
+// const wait = function(){
+//     return new Promise(function(resolve){
+//         setTimeout(()=> resolve(),3000)
+//     })
+// }
+
+// createImage('./img/img-1.jpg')
+// .then(img=>{
+//     return wait().then(()=> img.style.display = 'none');
+// })
+// .then(img => createImage('./img/img-2.jpg'))
+// .then(img => wait().then(()=> img.style.display = 'none'))
+// .then(img => createImage('./img/img-3.jpg'))
+// .then(img => wait().then(()=> img.style.display = 'none'))
+// .catch(err => console.log(err))
+
+
+
+// Async & Await
+
+const position = function(){
+    return new Promise(function(resolve,reject){
+        navigator.geolocation.getCurrentPosition(resolve,reject);
     })
 }
-
-const wait = function(imge){
-    return new Promise(function(resolve,reject){
-        setTimeout(()=> resolve() ,2000);
-
-    })
+const getCountry = async function(country){
+    const res = await fetch(`https://restcountries.com/v2/name/${country}`);
+    const data = await res.json();
+    renderCard(data[0])
 }
-createImage('./img/img-1.jpg')
-.then(res => {
-   wait()
-   img.style.display = 'none';
-   return createImage('./img/img-2.jpg')
-}).then(res =>{
-    wait()
-    img.style.display = 'none';
-     return createImage('./img/img-3.jpg')
-}).then(res => wait())
-.catch(er => console.log(er));
 
+const whereUser = async function(){
+    const pos = await position();
+    const {latitude,longitude} = pos.coords;
+
+    const res = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}`);
+    
+    const data = await res.json();
+    const code = data.countryCode;
+    const poscountry = await fetch(`https://restcountries.com/v2/alpha/${code}`);
+    const get = await poscountry.json();
+    renderCard(get)
+}
+
+back.addEventListener('click',function(e){
+    e.preventDefault();
+    countriesContainer.innerHTML = '';
+    form.classList.remove('hidden');
+    btn.classList.remove('hidden');
+    h1.classList.remove('hidden');
+    back.classList.add('hidden');
+    inputInformation.value = '';
+    inputInformation.focus();
+})
+form.addEventListener('submit',function(e){
+    e.preventDefault();
+    const country = inputInformation.value;
+    if(!country) return;
+
+    form.classList.add('hidden');
+    btn.classList.add('hidden');
+    h1.classList.add('hidden');
+    getCountry(country);
+    back.classList.remove('hidden');
+})
+
+btn.addEventListener('click',function(){
+    form.classList.add('hidden');
+    btn.classList.add('hidden');
+    h1.classList.add('hidden');
+    back.classList.remove('hidden');
+    whereUser();
+})
