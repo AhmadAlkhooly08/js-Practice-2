@@ -400,22 +400,38 @@ const position = function(){
     })
 }
 const getCountry = async function(country){
-    const res = await fetch(`https://restcountries.com/v2/name/${country}`);
-    const data = await res.json();
-    renderCard(data[0])
+    try{    
+        const res = await fetch(`https://restcountries.com/v2/name/${country}`);
+
+        if(!res.ok) throw new Error('Something went wrong');
+
+        const data = await res.json();
+        renderCard(data[0]);
+        return `boom 💥`;
+    } catch(err){
+        console.error(`${err} 💥`);
+        renderError(`💥 ${err.message}`)
+    }
 }
 
 const whereUser = async function(){
-    const pos = await position();
-    const {latitude,longitude} = pos.coords;
+    try{    const pos = await position();
+        const {latitude,longitude} = pos.coords;
 
-    const res = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}`);
-    
-    const data = await res.json();
-    const code = data.countryCode;
-    const poscountry = await fetch(`https://restcountries.com/v2/alpha/${code}`);
-    const get = await poscountry.json();
-    renderCard(get)
+        const res = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}`);
+
+        if(!res.ok) throw new Error('Something went wrong')
+
+        const data = await res.json();
+        const code = data.countryCode;
+        const poscountry = await fetch(`https://restcountries.com/v2/alpha/${code}`);
+        if(!poscountry.ok) throw new Error('Something went wrong')
+        const get = await poscountry.json();
+        renderCard(get)
+    } catch(err){
+        console.error(`${err} 💥`);
+        renderError(`Something went wrong 💥 ${err.message}`)
+    }
 }
 
 back.addEventListener('click',function(e){
@@ -436,6 +452,7 @@ form.addEventListener('submit',function(e){
     form.classList.add('hidden');
     btn.classList.add('hidden');
     h1.classList.add('hidden');
+    
     getCountry(country);
     back.classList.remove('hidden');
 })
@@ -446,4 +463,11 @@ btn.addEventListener('click',function(){
     h1.classList.add('hidden');
     back.classList.remove('hidden');
     whereUser();
-})
+});
+
+//! async Function always returns a promise so  if we returned a other value it will be the Fulfield value of the promise
+
+console.log(1);
+const d = getCountry();
+console.log(d);
+console.log(3);
