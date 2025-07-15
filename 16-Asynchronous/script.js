@@ -1,36 +1,39 @@
-'use strict';
+"use strict";
 
-const btn = document.querySelector('.btn-country');
-const countriesContainer = document.querySelector('.countries');
-const inputInformation = document.querySelector('.input');
-const form = document.querySelector('.information');
-const back = document.querySelector('.remove');
-const h1 = document.querySelector('.h1');
+const btn = document.querySelector(".btn-country");
+const countriesContainer = document.querySelector(".countries");
+const inputInformation = document.querySelector(".input");
+const form = document.querySelector(".information");
+const back = document.querySelector(".remove");
+const h1 = document.querySelector(".h1");
 inputInformation.focus();
 
-const renderCard = function(data, neghbor = ''){
-    const html = `
+const renderCard = function (data, neghbor = "") {
+  const html = `
         <article class="country ${neghbor}">
             <img class="country__img" src="${data.flag}" />
             <div class="country__data">
             <h3 class="country__name">${data.name}</h3>
             <h4 class="country__region">${data.region}</h4>
-            <p class="country__row"><span>👫</span>${(+data.population / 1000000).toFixed(1)}M people</p>
+            <p class="country__row"><span>👫</span>${(
+              +data.population / 1000000
+            ).toFixed(1)}M people</p>
             <p class="country__row"><span>🗣️</span>${data.languages[0].name}</p>
-            <p class="country__row"><span>💰</span>${data.currencies[0].name}</p>
+            <p class="country__row"><span>💰</span>${
+              data.currencies[0].name
+            }</p>
             </div>
         </article>
 
     `;
-        countriesContainer.insertAdjacentHTML("beforeend",html);
-        countriesContainer.style.opacity = 1;
+  countriesContainer.insertAdjacentHTML("beforeend", html);
+  countriesContainer.style.opacity = 1;
+};
 
-}
-
-const renderError = function(msg){
-    countriesContainer.insertAdjacentText("beforeend",msg);
-    countriesContainer.style.opacity = 1;
-}
+const renderError = function (msg) {
+  countriesContainer.insertAdjacentText("beforeend", msg);
+  countriesContainer.style.opacity = 1;
+};
 
 ///////////////////////////////////////
 
@@ -41,7 +44,7 @@ const renderError = function(msg){
 
 //     request.addEventListener('load',() => {
 //         const [data] = JSON.parse(request.responseText);
-//         console.log(data);       
+//         console.log(data);
 //         const html = `
 //         <article class="country">
 //             <img class="country__img" src="${data.flag}" />
@@ -65,7 +68,6 @@ const renderError = function(msg){
 // countrieCards('turkey');
 // countrieCards('saudi arabia');
 
-
 //! displaying neighbor country
 // function countieandNeghibor(country){
 //     // Ajax call country 1
@@ -76,7 +78,7 @@ const renderError = function(msg){
 //     request.addEventListener('load',() => {
 //         const [data] = JSON.parse(request.responseText);
 //         console.log(data);
-        
+
 //         // Render country
 //         renderCard(data);
 
@@ -99,7 +101,6 @@ const renderError = function(msg){
 // countieandNeghibor('turkey');
 // countieandNeghibor('saudi arabia');
 
-
 //! Promises and the Fetch API
 
 // const getCountryData = function(country){
@@ -113,29 +114,29 @@ const renderError = function(msg){
 // }
 
 // const getCountryData = function(country){
-    //     fetch(`https://restcountries.com/v2/name/${country}`)
-    //     .then((promise) =>{
-    //         if(!promise.ok){
-    //             throw new Error(`couldn't found Country Name. ${promise.status}`)
-    //         }
-    //         return promise.json()
-    //     })
-    //     .then((data) =>{
-    //         renderCard(data[0])
-    //         const neighbor = data[0]?.borders[0];
-    
-    //         return fetch(`https://restcountries.com/v2/alpha/${neighbor}`);
-    //     })
-    //     .then(promise => promise.json())
-    //     .then(data => renderCard(data,'neighbour'))
-    //     .catch((err) =>{
-    //         renderError(`Something went wrong 💥💥 ${err.message}. try again`)
-    //     })
-    //     .finally(() =>{
-    //         // ! the finally it works on the both sides then and catch
-    //         countriesContainer.style.opacity = 1;
-    //     })
-    // }    
+//     fetch(`https://restcountries.com/v2/name/${country}`)
+//     .then((promise) =>{
+//         if(!promise.ok){
+//             throw new Error(`couldn't found Country Name. ${promise.status}`)
+//         }
+//         return promise.json()
+//     })
+//     .then((data) =>{
+//         renderCard(data[0])
+//         const neighbor = data[0]?.borders[0];
+
+//         return fetch(`https://restcountries.com/v2/alpha/${neighbor}`);
+//     })
+//     .then(promise => promise.json())
+//     .then(data => renderCard(data,'neighbour'))
+//     .catch((err) =>{
+//         renderError(`Something went wrong 💥💥 ${err.message}. try again`)
+//     })
+//     .finally(() =>{
+//         // ! the finally it works on the both sides then and catch
+//         countriesContainer.style.opacity = 1;
+//     })
+// }
 // const getJson = function(url,error = ''){
 //     return  fetch(url).then((promise) =>{
 //                 if(!promise.ok){
@@ -180,7 +181,6 @@ const renderError = function(msg){
 //     back.classList.remove('hidden');
 // })
 
-
 ///////////////////////////////////////
 // Coding Challenge #1
 
@@ -220,7 +220,7 @@ GOOD LUCK 😀
 // const whereAmI = function(lat,lng){
 //     getcountry(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}`,'coudnt reach to position')
 //     .then(data => {
-//         console.log(`you live in ${data.city},${data.countryName} adress: ${data.countryName},${data.city},Beylikduzu,${data.locality} with postcode:${data.postcode}`);  
+//         console.log(`you live in ${data.city},${data.countryName} adress: ${data.countryName},${data.city},Beylikduzu,${data.locality} with postcode:${data.postcode}`);
 //         const getdataposition = data.countryCode;
 //         return getcountry(`https://restcountries.com/v2/alpha/${getdataposition}`,'coudnt find country')
 //     })
@@ -242,13 +242,12 @@ GOOD LUCK 😀
 //             btn.classList.add('hidden');
 //             whereAmI(latitude,longitude);
 //         })
-        
+
 //     },()=>{
 //         console.error('position undefiend');
 //     });
 // }
 // position();
-
 
 // The Event Loop in Practice
 
@@ -261,8 +260,7 @@ GOOD LUCK 😀
 // });
 // console.log('Test End');
 
-
-// 
+//
 
 // const discountPromis = new Promise(function(resolve,reject){
 //     console.log('checking for discounts');
@@ -292,9 +290,8 @@ GOOD LUCK 😀
 // }).then(res => console.log('waited 1 second '));
 
 //! To let promise run immediatly with fullfield or reject
-// Promise.resolve('abc').then(x => console.log(x)) 
-// Promise.reject( new Error('!!!Problem')).catch(x => console.log(x)) 
-
+// Promise.resolve('abc').then(x => console.log(x))
+// Promise.reject( new Error('!!!Problem')).catch(x => console.log(x))
 
 // !Promisifying the Geolocation API
 
@@ -304,7 +301,7 @@ GOOD LUCK 😀
 //         //     position => console.log(resolve(position)),
 //         //     err => console.error(reject(err))
 //         // );
-//         navigator.geolocation.getCurrentPosition(resolve,reject);      
+//         navigator.geolocation.getCurrentPosition(resolve,reject);
 //     })
 // }
 
@@ -364,10 +361,10 @@ GOOD LUCK 😀
 //         img.addEventListener('load',function(){
 //             const father = document.querySelector('.images');
 //             father.append(img);
-            
+
 //             resolve(img);
 //         });
-        
+
 //         img.addEventListener('error',function(){
 //             reject(new Error('somthing went wrong while loading the image'))
 //         })
@@ -390,84 +387,188 @@ GOOD LUCK 😀
 // .then(img => wait().then(()=> img.style.display = 'none'))
 // .catch(err => console.log(err))
 
-
-
 // Async & Await
 
-const position = function(){
-    return new Promise(function(resolve,reject){
-        navigator.geolocation.getCurrentPosition(resolve,reject);
-    })
-}
-const getCountry = async function(country){
-    try{    
-        const res = await fetch(`https://restcountries.com/v2/name/${country}`);
+const position = function () {
+  return new Promise(function (resolve, reject) {
+    navigator.geolocation.getCurrentPosition(resolve, reject);
+  });
+};
+const getCountry = async function (country) {
+  try {
+    const res = await fetch(`https://restcountries.com/v2/name/${country}`);
 
-        if(!res.ok) throw new Error('Something went wrong');
+    if (!res.ok) throw new Error("Something went wrong");
 
-        const data = await res.json();
-        renderCard(data[0]);
-        return `boom 💥`;
-    } catch(err){
-        console.error(`${err} 💥`);
-        renderError(`💥 ${err.message}`)
-    }
-}
+    const data = await res.json();
+    renderCard(data[0]);
+  } catch (err) {
+    console.error(`${err} 💥`);
+    renderError(`💥 ${err.message}`);
+  }
+};
 
-const whereUser = async function(){
-    try{    const pos = await position();
-        const {latitude,longitude} = pos.coords;
+const whereUser = async function () {
+  try {
+    const pos = await position();
+    const { latitude, longitude } = pos.coords;
 
-        const res = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}`);
+    const res = await fetch(
+      `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}`
+    );
 
-        if(!res.ok) throw new Error('Something went wrong')
+    if (!res.ok) throw new Error("Something went wrong");
 
-        const data = await res.json();
-        const code = data.countryCode;
-        const poscountry = await fetch(`https://restcountries.com/v2/alpha/${code}`);
-        if(!poscountry.ok) throw new Error('Something went wrong')
-        const get = await poscountry.json();
-        renderCard(get)
-    } catch(err){
-        console.error(`${err} 💥`);
-        renderError(`Something went wrong 💥 ${err.message}`)
-    }
-}
+    const data = await res.json();
+    const code = data.countryCode;
+    const poscountry = await fetch(
+      `https://restcountries.com/v2/alpha/${code}`
+    );
+    if (!poscountry.ok) throw new Error("Something went wrong");
+    const get = await poscountry.json();
+    renderCard(get);
+    return `you live in ${data.city},${data.countryName}`;
+  } catch (err) {
+    console.error(`${err} 💥`);
+    renderError(`Something went wrong 💥 ${err.message}`);
 
-back.addEventListener('click',function(e){
-    e.preventDefault();
-    countriesContainer.innerHTML = '';
-    form.classList.remove('hidden');
-    btn.classList.remove('hidden');
-    h1.classList.remove('hidden');
-    back.classList.add('hidden');
-    inputInformation.value = '';
-    inputInformation.focus();
-})
-form.addEventListener('submit',function(e){
-    e.preventDefault();
-    const country = inputInformation.value;
-    if(!country) return;
+    // reject the promise returned from the async function
+    throw err;
+  }
+};
 
-    form.classList.add('hidden');
-    btn.classList.add('hidden');
-    h1.classList.add('hidden');
-    
-    getCountry(country);
-    back.classList.remove('hidden');
-})
+back.addEventListener("click", function (e) {
+  e.preventDefault();
+  countriesContainer.innerHTML = "";
+  form.classList.remove("hidden");
+  btn.classList.remove("hidden");
+  h1.classList.remove("hidden");
+  back.classList.add("hidden");
+  inputInformation.value = "";
+  inputInformation.focus();
+});
+form.addEventListener("submit", function (e) {
+  e.preventDefault();
+  const country = inputInformation.value;
+  if (!country) return;
 
-btn.addEventListener('click',function(){
-    form.classList.add('hidden');
-    btn.classList.add('hidden');
-    h1.classList.add('hidden');
-    back.classList.remove('hidden');
-    whereUser();
+  form.classList.add("hidden");
+  btn.classList.add("hidden");
+  h1.classList.add("hidden");
+
+  getCountry(country);
+  back.classList.remove("hidden");
+});
+
+btn.addEventListener("click", function () {
+  form.classList.add("hidden");
+  btn.classList.add("hidden");
+  h1.classList.add("hidden");
+  back.classList.remove("hidden");
+  whereUser();
 });
 
 //! async Function always returns a promise so  if we returned a other value it will be the Fulfield value of the promise
 
-console.log(1);
-const d = getCountry();
-console.log(d);
-console.log(3);
+// console.log(1);
+// // const d = getCountry();
+// // console.log(d);
+// whereUser().then(city => console.log(city)).catch(err => console.error()).finally(()=>console.log(3))
+
+// (async function(){
+//     try{
+//         console.log(1);
+//         const city = await whereUser();
+//         console.log(city);
+//         console.log(3);
+//     } catch(err){
+//         throw console.error(`2: ${err.message} 💥`);
+//     }
+// })();
+
+const getData = function (country) {
+  return fetch(country).then((res) => {
+    if (!res.ok) {
+      throw new Error("something wrong");
+    }
+    return res.json();
+  });
+};
+
+//! Prmise.all
+const get3countries = async function (c1, c2, c3) {
+  try {
+    // const [data1] = await getData(`https://restcountries.com/v2/name/${c1}`);
+    // const [data2] = await getData(`https://restcountries.com/v2/name/${c2}`);
+    // const [data3] = await getData(`https://restcountries.com/v2/name/${c3}`);
+    // console.log([data1.capital,data2.capital,data3.capital]);
+
+    const data = await Promise.all([
+      getData(`https://restcountries.com/v2/name/${c1}`),
+      getData(`https://restcountries.com/v2/name/${c2}`),
+      getData(`https://restcountries.com/v2/name/${c3}`),
+    ]);
+    console.log(data.map((data) => data[0].capital));
+  } catch (err) {
+    console.log(`!!!${err}`);
+  }
+};
+
+get3countries("egypt", "turkey", "saudi arabia");
+
+//! Promise.race
+//^ Promis.race: it's like a race wich promise resolves or rejects the first it will be the returned Promise
+
+(async function () {
+  const race = await Promise.race([
+    getData(`https://restcountries.com/v2/name/egypt`),
+    getData(`https://restcountries.com/v2/name/italy`),
+    getData(`https://restcountries.com/v2/name/china`),
+  ]);
+  console.log(race[0]);
+})();
+
+const waitReject = function (sec) {
+  return new Promise(function (_, reject) {
+    setTimeout(function () {
+      reject(console.error("tooked to long"));
+    }, sec * 1000);
+  });
+};
+
+Promise.race([
+  getData(`https://restcountries.com/v2/name/tanzania`),
+  waitReject(5),
+])
+  .then((data) => console.log(data[0]))
+  .catch((err) => console.error(err));
+
+
+//! Promise.allSettled
+//^ Promise.allSettled: returns all the results even if there is an rejected promise
+
+Promise.allSettled([
+    Promise.resolve('sucssed'),
+    Promise.reject('faild'),
+    Promise.resolve('sucssed'),
+]).then(res => console.log(res));
+
+//! diffrence between allSettled and all that all dosent complete if there is an rejected Promise
+// Promise.all([
+//     Promise.resolve('sucssed'),
+//     Promise.reject('faild'),
+//     Promise.resolve('sucssed'),
+// ]).then(res => console.log(res))
+
+//! Promise.any
+// ^Promise.any: similar to race but this returns only the first resolved Promise and ignores the rejected ones 
+
+(async function () {
+    const race = await Promise.any([
+      getData(`https://restcountries.com/v2/name/egypt`),
+      getData(`https://restcountries.com/v2/name/italyhvh`),
+      getData(`https://restcountries.com/v2/name/turkey`),
+    ]);
+    console.log(race[0]);
+})();
+  
