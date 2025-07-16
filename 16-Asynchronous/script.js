@@ -389,84 +389,84 @@ GOOD LUCK 😀
 
 // Async & Await
 
-const position = function () {
-  return new Promise(function (resolve, reject) {
-    navigator.geolocation.getCurrentPosition(resolve, reject);
-  });
-};
-const getCountry = async function (country) {
-  try {
-    const res = await fetch(`https://restcountries.com/v2/name/${country}`);
+// const position = function () {
+//   return new Promise(function (resolve, reject) {
+//     navigator.geolocation.getCurrentPosition(resolve, reject);
+//   });
+// };
+// const getCountry = async function (country) {
+//   try {
+//     const res = await fetch(`https://restcountries.com/v2/name/${country}`);
 
-    if (!res.ok) throw new Error("Something went wrong");
+//     if (!res.ok) throw new Error("Something went wrong");
 
-    const data = await res.json();
-    renderCard(data[0]);
-  } catch (err) {
-    console.error(`${err} 💥`);
-    renderError(`💥 ${err.message}`);
-  }
-};
+//     const data = await res.json();
+//     renderCard(data[0]);
+//   } catch (err) {
+//     console.error(`${err} 💥`);
+//     renderError(`💥 ${err.message}`);
+//   }
+// };
 
-const whereUser = async function () {
-  try {
-    const pos = await position();
-    const { latitude, longitude } = pos.coords;
+// const whereUser = async function () {
+//   try {
+//     const pos = await position();
+//     const { latitude, longitude } = pos.coords;
 
-    const res = await fetch(
-      `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}`
-    );
+//     const res = await fetch(
+//       `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}`
+//     );
 
-    if (!res.ok) throw new Error("Something went wrong");
+//     if (!res.ok) throw new Error("Something went wrong");
 
-    const data = await res.json();
-    const code = data.countryCode;
-    const poscountry = await fetch(
-      `https://restcountries.com/v2/alpha/${code}`
-    );
-    if (!poscountry.ok) throw new Error("Something went wrong");
-    const get = await poscountry.json();
-    renderCard(get);
-    return `you live in ${data.city},${data.countryName}`;
-  } catch (err) {
-    console.error(`${err} 💥`);
-    renderError(`Something went wrong 💥 ${err.message}`);
+//     const data = await res.json();
+//     const code = data.countryCode;
+//     const poscountry = await fetch(
+//       `https://restcountries.com/v2/alpha/${code}`
+//     );
+//     if (!poscountry.ok) throw new Error("Something went wrong");
+//     const get = await poscountry.json();
+//     renderCard(get);
+//     return `you live in ${data.city},${data.countryName}`;
+//   } catch (err) {
+//     console.error(`${err} 💥`);
+//     renderError(`Something went wrong 💥 ${err.message}`);
 
-    // reject the promise returned from the async function
-    throw err;
-  }
-};
+//     // reject the promise returned from the async function
+//     throw err;
+//   }
+// };
 
-back.addEventListener("click", function (e) {
-  e.preventDefault();
-  countriesContainer.innerHTML = "";
-  form.classList.remove("hidden");
-  btn.classList.remove("hidden");
-  h1.classList.remove("hidden");
-  back.classList.add("hidden");
-  inputInformation.value = "";
-  inputInformation.focus();
-});
-form.addEventListener("submit", function (e) {
-  e.preventDefault();
-  const country = inputInformation.value;
-  if (!country) return;
+// back.addEventListener("click", function (e) {
+//   e.preventDefault();
+//   countriesContainer.innerHTML = "";
+//   form.classList.remove("hidden");
+//   btn.classList.remove("hidden");
+//   h1.classList.remove("hidden");
+//   back.classList.add("hidden");
+//   inputInformation.value = "";
+//   inputInformation.focus();
+// });
+// form.addEventListener("submit", function (e) {
+//   e.preventDefault();
+//   const country = inputInformation.value;
+//   if (!country) return;
 
-  form.classList.add("hidden");
-  btn.classList.add("hidden");
-  h1.classList.add("hidden");
+//   form.classList.add("hidden");
+//   btn.classList.add("hidden");
+//   h1.classList.add("hidden");
 
-  getCountry(country);
-  back.classList.remove("hidden");
-});
+//   getCountry(country);
+//   back.classList.remove("hidden");
+// });
 
-btn.addEventListener("click", function () {
-  form.classList.add("hidden");
-  btn.classList.add("hidden");
-  h1.classList.add("hidden");
-  back.classList.remove("hidden");
-  whereUser();
-});
+// btn.addEventListener("click", function () {
+//   form.classList.add("hidden");
+//   btn.classList.add("hidden");
+//   h1.classList.add("hidden");
+//   back.classList.remove("hidden");
+//   whereUser();
+// });
 
 //! async Function always returns a promise so  if we returned a other value it will be the Fulfield value of the promise
 
@@ -572,3 +572,84 @@ Promise.allSettled([
     console.log(race[0]);
 })();
   
+
+///////////////////////////////////////
+// Coding Challenge #3
+
+/* 
+PART 1
+Write an async function 'loadNPause' that recreates Coding Challenge #2, this time using async/await (only the part where the promise is consumed). Compare the two versions, think about the big differences, and see which one you like more.
+Don't forget to test the error handler, and to set the network speed to 'Fast 3G' in the dev tools Network tab.
+
+PART 2
+1. Create an async function 'loadAll' that receives an array of image paths 'imgArr';
+2. Use .map to loop over the array, to load all the images with the 'createImage' function (call the resulting array 'imgs')
+3. Check out the 'imgs' array in the console! Is it like you expected?
+4. Use a promise combinator function to actually get the images from the array 😉
+5. Add the 'paralell' class to all the images (it has some CSS styles).
+
+TEST DATA: ['img/img-1.jpg', 'img/img-2.jpg', 'img/img-3.jpg']. To test, turn off the 'loadNPause' function.
+
+GOOD LUCK 😀
+*/
+
+const createImage = function(imglink){
+    return new Promise(function(resolve,reject){
+        const img = document.createElement('img');
+        img.src = imglink;
+        img.addEventListener('load',function(){
+            const father = document.querySelector('.images');
+            father.style.opacity = 1;
+            father.append(img);
+
+            resolve(img);
+        });
+
+        img.addEventListener('error',function(){
+            reject(new Error('somthing went wrong while loading the image'))
+        })
+    })
+}
+
+const wait = function(){
+    return new Promise(function(resolve){
+        setTimeout(()=> resolve(),3000)
+    })
+}
+// const loadNPause = async function(){
+//     try{
+//         const im1 = await createImage('./img/img-1.jpg');
+//         await wait();
+//         im1.style.display = 'none';
+
+//         const im2 = await createImage('./img/img-2.jpg');
+//         await wait();
+//         im2.style.display = 'none';
+
+//         const im3 = await createImage('./img/img-3.jpg');
+//         await wait();
+//         im3.style.display = 'none';
+//     } catch(err){
+//         console.error(err);
+//         throw err;
+//     }
+// }
+// loadNPause();
+
+const loadAll = async function(im1,im2,im3){
+    try{
+        const allimg = [im1,im2,im3];
+        const imgs = allimg.map(img => createImage(img));
+        console.log(imgs);
+        const combinator = await Promise.all(imgs);
+        console.log(combinator);
+        combinator.map(img => img.classList.add('parallel')) 
+    
+    } catch(err){
+        console.error(`💥 ${err}`);
+        throw err;
+    }
+}
+
+const imgArr = ['img/img-1.jpg', 'img/img-2.jpg', 'img/img-3.jpg'];
+loadAll(...imgArr)
