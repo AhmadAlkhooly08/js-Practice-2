@@ -55,3 +55,32 @@ const getRandomUser = async function(){
 
 const getPromise = await getRandomUser();
 console.log(getPromise);
+
+const shopCart2 =  (function(){
+    const cart = [];
+    const shippingCost = 10;
+    const totalPrice = 276;
+    const totalQuantity = 23;
+
+    const addToCart = function(product,quantity){
+        cart.push({product,quantity});
+        console.log(`${quantity} ${product} added to your basket`);
+    }
+
+    const orderStock = function(product,quantity){
+        cart.push({product,quantity});
+        console.log(`${quantity} ${product} ordered from supplier`);
+    }
+
+    return {
+        cart,
+        shippingCost,
+        totalPrice,
+        totalQuantity,
+        addToCart
+    }
+})();
+
+console.log(shopCart2);
+shopCart2.addToCart('pizza',3);
+shopCart2.addToCart('apple juice',3);
