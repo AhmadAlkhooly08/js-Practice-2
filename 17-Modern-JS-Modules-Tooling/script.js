@@ -84,3 +84,22 @@ const shopCart2 =  (function(){
 console.log(shopCart2);
 shopCart2.addToCart('pizza',3);
 shopCart2.addToCart('apple juice',3);
+
+import cloneDeep from './node_modules/lodash-es/cloneDeep.js';
+
+const state ={
+    cart:[
+        {product:'milk', quantity: 3},
+        {product:'juice', quantity: 2},
+        {product:'burger', quantity: 4},
+    ],
+    user:{gotlogin:true}
+}
+
+const checkStateCopy = Object.assign({},state);
+
+const checkDeepCopy = cloneDeep(state);
+
+state.user.gotlogin = false;
+console.log(checkStateCopy);
+console.log(checkDeepCopy);
