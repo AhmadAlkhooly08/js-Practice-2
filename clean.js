@@ -12,7 +12,6 @@ var budget = [
 var limits = {
   jonas: 1500,
   matilda: 100,
-  ahmed:600,
 };
 
 var add = function (value, description, user) {
@@ -63,5 +62,3 @@ var bigExpenses = function (limit) {
   output = output.slice(0, -2); // Remove last '/ '
   console.log(output);
 };
-
-export {budget,add,limits,check}

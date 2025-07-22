@@ -1,18 +1,14 @@
 {
   "name": "17-modern-js-modules-tooling",
   "version": "1.0.0",
-
+  "main": "clean.js",
   "scripts": {
-    "start": "parcel index.html",
-    "build": "parcel build index.html"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "AHMAD",
   "license": "ISC",
   "description": "",
   "dependencies": {
     "lodash-es": "^4.17.21"
-  },
-  "devDependencies": {
-    "parcel": "^2.15.4"
   }
 }

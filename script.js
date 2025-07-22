@@ -50,11 +50,11 @@ const getRandomUser = async function(){
 }
 
 //! Not clean code
-const getPromise = getRandomUser();
-getPromise.then(res => console.log(res))
+// const getPromise = getRandomUser();
+// getPromise.then(res => console.log(res);)
 
-// const getPromise = await getRandomUser()
-// console.log(getPromise);
+const getPromise = await getRandomUser();
+console.log(getPromise);
 
 const shopCart2 =  (function(){
     const cart = [];
@@ -85,7 +85,7 @@ console.log(shopCart2);
 shopCart2.addToCart('pizza',3);
 shopCart2.addToCart('apple juice',3);
 
-// import cloneDeep from './node_modules/lodash-es/cloneDeep.js';
+import cloneDeep from './node_modules/lodash-es/cloneDeep.js';
 
 const state ={
     cart:[
@@ -98,21 +98,8 @@ const state ={
 
 const checkStateCopy = Object.assign({},state);
 
-// const checkDeepCopy = cloneDeep(state);
+const checkDeepCopy = cloneDeep(state);
 
 state.user.gotlogin = false;
 console.log(checkStateCopy);
-// console.log(checkDeepCopy);
-
-import * as budjetCount from './clean.js';
-
-budjetCount.add(400,'macbook air m2','ahmed')
-budjetCount.add(100,'Apple airpods','ahmed')
-budjetCount.add(300,'iphone 12 mini','ahmed')
-budjetCount.check()
-console.log(budjetCount.budget);
-
-//! we use this if we dont want the web to relowd
-if(module.hot){
-    module.hot.accept();
-}
+console.log(checkDeepCopy);
