@@ -673,8 +673,6 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 // console.log(totalPrice,tq);
 // import everything (*) as name from exporting file
 var _shopCartJs = require("./shopCart.js");
-// console.log(checkDeepCopy);
-var _cleanJs = require("./clean.js");
 console.log('importing Modules');
 _shopCartJs.addToCart('EGG', 30);
 console.log(_shopCartJs.cart);
@@ -707,7 +705,7 @@ const getRandomUser = async function() {
 //! Not clean code
 const getPromise = getRandomUser();
 getPromise.then((res)=>console.log(res));
-// const getPromise = await getRandomUser()
+// const getPromise = await getRandomUser();
 // console.log(getPromise);
 const shopCart2 = function() {
     const cart = [];
@@ -763,15 +761,10 @@ const checkStateCopy = Object.assign({}, state);
 // const checkDeepCopy = cloneDeep(state);
 state.user.gotlogin = false;
 console.log(checkStateCopy);
-_cleanJs.add(400, 'macbook air m2', 'ahmed');
-_cleanJs.add(100, 'Apple airpods', 'ahmed');
-_cleanJs.add(300, 'iphone 12 mini', 'ahmed');
-_cleanJs.check();
-console.log(_cleanJs.budget);
-//! we use this if we dont want the web to relowd
+// console.log(checkDeepCopy);
 if (module.hot) module.hot.accept();
 
-},{"./shopCart.js":"kgcIF","./clean.js":"5fddP"}],"kgcIF":[function(require,module,exports,__globalThis) {
+},{"./shopCart.js":"kgcIF"}],"kgcIF":[function(require,module,exports,__globalThis) {
 // exporting Modules
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
@@ -837,93 +830,6 @@ exports.export = function(dest, destName, get) {
     });
 };
 
-},{}],"5fddP":[function(require,module,exports,__globalThis) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "budget", ()=>budget);
-parcelHelpers.export(exports, "add", ()=>add);
-parcelHelpers.export(exports, "limits", ()=>limits);
-parcelHelpers.export(exports, "check", ()=>check);
-var budget = [
-    {
-        value: 250,
-        description: "Sold old TV \uD83D\uDCFA",
-        user: 'jonas'
-    },
-    {
-        value: -45,
-        description: "Groceries \uD83E\uDD51",
-        user: 'jonas'
-    },
-    {
-        value: 3500,
-        description: "Monthly salary \uD83D\uDC69\u200D\uD83D\uDCBB",
-        user: 'jonas'
-    },
-    {
-        value: 300,
-        description: "Freelancing \uD83D\uDC69\u200D\uD83D\uDCBB",
-        user: 'jonas'
-    },
-    {
-        value: -1100,
-        description: "New iPhone \uD83D\uDCF1",
-        user: 'jonas'
-    },
-    {
-        value: -20,
-        description: "Candy \uD83C\uDF6D",
-        user: 'matilda'
-    },
-    {
-        value: -125,
-        description: "Toys \uD83D\uDE82",
-        user: 'matilda'
-    },
-    {
-        value: -1800,
-        description: "New Laptop \uD83D\uDCBB",
-        user: 'jonas'
-    }
-];
-var limits = {
-    jonas: 1500,
-    matilda: 100,
-    ahmed: 600
-};
-var add = function(value, description, user) {
-    if (!user) user = 'jonas';
-    user = user.toLowerCase();
-    var lim;
-    if (limits[user]) lim = limits[user];
-    else lim = 0;
-    if (value <= lim) budget.push({
-        value: -value,
-        description: description,
-        user: user
-    });
-};
-add(10, "Pizza \uD83C\uDF55");
-add(100, "Going to movies \uD83C\uDF7F", 'Matilda');
-add(200, 'Stuff', 'Jay');
-console.log(budget);
-var check = function() {
-    for (var el of budget){
-        var lim;
-        if (limits[el.user]) lim = limits[el.user];
-        else lim = 0;
-        if (el.value < -lim) el.flag = 'limit';
-    }
-};
-check();
-console.log(budget);
-var bigExpenses = function(limit) {
-    var output = '';
-    for (var el of budget)if (el.value <= -limit) output += el.description.slice(-2) + ' / '; // Emojis are 2 chars
-    output = output.slice(0, -2); // Remove last '/ '
-    console.log(output);
-};
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}]},["n0fw4","kTBnD"], "kTBnD", "parcelRequireeb47", {})
+},{}]},["n0fw4","kTBnD"], "kTBnD", "parcelRequireeb47", {})
 
 //# sourceMappingURL=17-Modern-JS-Modules-Tooling.3c14d121.js.map
