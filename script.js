@@ -107,3 +107,19 @@ console.log(checkStateCopy);
 if(module.hot){
     module.hot.accept();
 }
+
+class father{
+    constructor(fatherName){
+        this.father = fatherName
+    }
+}
+class Person extends father{
+    greeting = 'Hey'
+    constructor(name,fatherName){
+        super(fatherName),
+        this.name = name;
+        console.log(`${this.greeting} ${name} bin ${fatherName}`);
+    }
+}
+
+const name = new Person('Ahmad','Yaser');

@@ -763,6 +763,19 @@ state.user.gotlogin = false;
 console.log(checkStateCopy);
 // console.log(checkDeepCopy);
 if (module.hot) module.hot.accept();
+class father {
+    constructor(fatherName){
+        this.father = fatherName;
+    }
+}
+class Person extends father {
+    greeting = 'Hey';
+    constructor(name, fatherName){
+        super(fatherName), this.name = name;
+        console.log(`${this.greeting} ${name} bin ${fatherName}`);
+    }
+}
+const name = new Person('Ahmad', 'Yaser');
 
 },{"./shopCart.js":"kgcIF"}],"kgcIF":[function(require,module,exports,__globalThis) {
 // exporting Modules
