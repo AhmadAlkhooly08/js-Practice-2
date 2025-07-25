@@ -1,0 +1,596 @@
+:root {
+  --color-brand--1: #ffb545;
+  --color-brand--2: #00c46a;
+
+  --color-dark--1: #2d3439;
+  --color-dark--2: #42484d;
+  --color-light--1: #aaa;
+  --color-light--2: #ececec;
+  --color-light--3: rgb(214, 222, 224);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+
+html {
+  font-size: 62.5%;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Manrope', sans-serif;
+  color: var(--color-light--2);
+  font-weight: 400;
+  line-height: 1.6;
+  height: 100vh;
+  overscroll-behavior-y: none;
+
+  background-color: #fff;
+  padding: 2.5rem;
+
+  display: flex;
+}
+
+/* GENERAL */
+a:link,
+a:visited {
+  color: var(--color-brand--1);
+}
+
+/* SIDEBAR */
+.sidebar {
+  flex-basis: 50rem;
+  background-color: var(--color-dark--1);
+  padding: 3rem 5rem 4rem 5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.logo {
+  height: 5.2rem;
+  align-self: center;
+  margin-bottom: 4rem;
+}
+
+.workouts {
+  list-style: none;
+  height: 77vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.workouts::-webkit-scrollbar {
+  width: 0;
+}
+
+.workout {
+  background-color: var(--color-dark--2);
+  border-radius: 5px;
+  padding: 1.5rem 2.25rem;
+  margin-bottom: 1.75rem;
+  cursor: pointer;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 0.75rem 1.5rem;
+}
+.workout--running {
+  border-left: 5px solid var(--color-brand--2);
+}
+.workout--cycling {
+  border-left: 5px solid var(--color-brand--1);
+}
+
+.workout__title {
+  font-size: 1.7rem;
+  font-weight: 600;
+  grid-column: 1 / -1;
+}
+
+.workout__details {
+  display: flex;
+  align-items: baseline;
+}
+
+.workout__icon {
+  font-size: 1.8rem;
+  margin-right: 0.2rem;
+  height: 0.28rem;
+}
+
+.workout__value {
+  font-size: 1.5rem;
+  margin-right: 0.5rem;
+}
+
+.workout__unit {
+  font-size: 1.1rem;
+  color: var(--color-light--1);
+  text-transform: uppercase;
+  font-weight: 800;
+}
+
+.form {
+  background-color: var(--color-dark--2);
+  border-radius: 5px;
+  padding: 1.5rem 2.75rem;
+  margin-bottom: 1.75rem;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem 2.5rem;
+
+  /* Match height and activity boxes */
+  height: 9.25rem;
+  transition: all 0.5s, transform 1ms;
+}
+
+.form.hidden {
+  transform: translateY(-30rem);
+  height: 0;
+  padding: 0 2.25rem;
+  margin-bottom: 0;
+  opacity: 0;
+}
+
+.form__row {
+  display: flex;
+  align-items: center;
+}
+
+.form__row--hidden {
+  display: none;
+}
+
+.form__label {
+  flex: 0 0 50%;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.form__input {
+  width: 100%;
+  padding: 0.3rem 1.1rem;
+  font-family: inherit;
+  font-size: 1.4rem;
+  border: none;
+  border-radius: 3px;
+  background-color: var(--color-light--3);
+  transition: all 0.2s;
+}
+
+.form__input:focus {
+  outline: none;
+  background-color: #fff;
+}
+
+.form__btn {
+  display: none;
+}
+
+.copyright {
+  margin-top: auto;
+  font-size: 1.3rem;
+  text-align: center;
+  color: var(--color-light--1);
+}
+
+.twitter-link:link,
+.twitter-link:visited {
+  color: var(--color-light--1);
+  transition: all 0.2s;
+}
+
+.twitter-link:hover,
+.twitter-link:active {
+  color: var(--color-light--2);
+}
+
+/* MAP */
+#map {
+  flex: 1;
+  height: 100%;
+  background-color: var(--color-light--1);
+}
+
+/* Popup width is defined in JS using options */
+.leaflet-popup .leaflet-popup-content-wrapper {
+  background-color: var(--color-dark--1);
+  color: var(--color-light--2);
+  border-radius: 5px;
+  padding-right: 0.6rem;
+}
+
+.leaflet-popup .leaflet-popup-content {
+  font-size: 1.5rem;
+}
+
+.leaflet-popup .leaflet-popup-tip {
+  background-color: var(--color-dark--1);
+}
+
+.running-popup .leaflet-popup-content-wrapper {
+  border-left: 5px solid var(--color-brand--2);
+}
+.cycling-popup .leaflet-popup-content-wrapper {
+  border-left: 5px solid var(--color-brand--1);
+}
+.btns{
+  display: flex;
+  justify-content: space-around;
+}
+
+.btn-history,.btn-sort{
+  background-color: #00c46a;
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.3rem;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(0, 196, 106, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: block;
+  margin: 40px auto; /* Center horizontally */
+  text-align: center;
+}
+.btn-history:hover {
+  background-color: #00a95a;
+  box-shadow: 0 6px 18px rgba(0, 196, 106, 0.4);
+  transform: translateY(-2px);
+}
+.btn-sort:hover{
+  background-color: #00a95a;
+  box-shadow: 0 6px 18px rgba(0, 196, 106, 0.4);
+  transform: translateY(-2px);
+}
+.dot-wrapper{
+  position: relative;
+  display: inline-block;
+  float: right;
+}
+
+.dot-button {
+  background: none;
+  border: none;
+  font-size: 27px;
+  cursor: pointer;
+  padding: 2px 5px;
+  color: #cecbcb;
+}
+
+.dropdown {
+  position: absolute;
+  top: 30px;
+  right: 0;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 5px 0;
+  list-style: none;
+  width: 90px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+}
+.dropdown__item {
+  padding: 4px 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+  color: #42484d;
+}
+
+.dropdown__item:hover {
+  background: #f0f0f0;
+}
+
+.hidden {
+  display: none;
+}
+
+.highlighted-running {
+  outline: 2px solid #00c853;
+  animation: pop 0.3s ease-out;
+}
+.highlighted-cycling {
+  outline: 1px solid #ffb545;
+  animation: pop 0.3s ease-out;
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(0.97);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+.fade-out {
+  opacity: 0;
+  transform: scale(0.95);
+  transition: all 0.3s ease;
+}
+
+/* 
+"use strict";
+
+
+class Workout{
+  #date = new Date();
+  #id;
+  
+  constructor(coords,duration,distance){
+    this.coords = coords
+    this.duration = duration;
+    this.distance = distance;
+    this.#id = Math.floor(100000 + Math.random() * 900000);
+  }
+
+  get id(){
+    return this.#id;
+  }
+
+  setDes(){
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+    return this.discription = `${this.type[0].toUpperCase()}${this.type.slice(1)} on ${months[this.#date.getMonth()]} ${this.#date.getDate()}`
+
+  }
+}
+
+class Running extends Workout{
+  type = 'running';
+
+  constructor(coords,duration,distance,cadence){
+    super(coords,duration,distance);
+    this.cadence = cadence;
+    this.calcPace();
+    this.setDes();
+
+  }
+
+  calcPace(){
+    this.pace = this.duration / this.distance;
+    return this.pace;
+  }
+}
+class Cycling extends Workout{
+  type = 'cycling';
+
+  constructor(coords,duration,distance,elevation){
+    super(coords,duration,distance);
+    this.elevation = elevation;
+    this.calcSpeed();
+    this.setDes();
+  }
+
+  calcSpeed(){
+    this.speed = this.distance / (this.duration / 60);
+    return this.speed;
+  }
+}
+
+const form = document.querySelector('.form');
+const containerWorkouts = document.querySelector('.workouts');
+const inputType = document.querySelector('.form__input--type');
+const inputDistance = document.querySelector('.form__input--distance');
+const inputDuration = document.querySelector('.form__input--duration');
+const inputCadence = document.querySelector('.form__input--cadence');
+const inputElevation = document.querySelector('.form__input--elevation');
+const btnHistory = document.querySelector('.btn-history ')
+
+class App{
+  #map;
+  #clicked;
+  #workout;
+  #workouts = [];
+  constructor(){
+    this._getPosition();
+
+    this._getLocalStorage();
+
+    inputType.addEventListener('change',this._toggleElavationField.bind(this))
+    form.addEventListener('submit',this._newWorkout.bind(this));
+    containerWorkouts.addEventListener('click',this._MoveToMarker.bind(this))
+    btnHistory.addEventListener('click',this._reset.bind(this))
+  }
+
+  _getPosition(){
+    navigator.geolocation.getCurrentPosition(this._loadMap.bind(this),()=> alert('couldnt accses your position'))
+  }
+  _loadMap(position){
+    const {latitude} = position.coords;
+    const {longitude} = position.coords;
+    this.#map = L.map('map').setView([latitude, longitude], 13);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(this.#map);
+    this._showForm();
+
+    this.#workouts.forEach(work => this._renderWorkoutMarker(work));
+  }
+
+  _showForm(){
+    this.#map.on('click',this._mapOnclick.bind(this))
+  }
+  _mapOnclick(e){
+    const {lat,lng} = e.latlng;
+    this.#clicked = [lat, lng]; 
+    form.classList.remove('hidden');
+    inputDistance.focus();
+  }
+
+  _toggleElavationField(){
+    inputCadence.closest('.form__row').classList.toggle('form__row--hidden');
+    inputElevation.closest('.form__row').classList.toggle('form__row--hidden');
+  }
+
+  _newWorkout(e){
+    e.preventDefault();
+    let allData,check;
+    const durationData = +inputDuration.value;
+    const distanceData = +inputDistance.value;
+    const type = inputType.value;
+
+    if(type === 'running'){
+      const cadenceData = +inputCadence.value;
+      allData = [durationData,distanceData,cadenceData];
+      check = allData.every(data => data > 0 && data !== undefined);
+      this.#workout = new Running(this.#clicked,...allData)
+    }
+    if(type === 'cycling'){
+      const elevationData = +inputElevation.value;
+      allData = [durationData,distanceData,elevationData];
+      check = [durationData,distanceData].every(data => data > 0 && data !== undefined);
+      this.#workout = new Cycling(this.#clicked,...allData);
+    }
+    console.log(this.#workout);
+
+    if(check){
+      this.#workouts.push(this.#workout)
+
+      // render Workout maker
+        this._renderWorkoutMarker(this.#workout);
+    
+      // render Workout List
+       this._renderWorkoutList(this.#workout)
+      
+      // hide form
+      form.classList.add('hidden');
+      inputDuration.value = inputDistance.value = inputCadence.value = inputElevation.value = '';
+
+      // set local storage
+       this._setLocalStage()
+    }    
+
+    if(!check){
+      alert('data must be a number bigger than zero ')
+    }
+
+
+  }
+
+  _renderWorkoutMarker(workout){
+    L.marker(workout.coords).addTo(this.#map)
+    .bindPopup(
+      L.popup({
+        maxWidth: 250,
+        minWidth: 100,
+        autoClose: false,
+        closeOnClick: false,
+        className: `${workout.type}-popup`,
+      })
+    )
+    .setPopupContent(
+      `${workout.type === 'running' ? '🏃‍♂️' : '🚴‍♀️'} ${workout.discription}`
+    )
+    .openPopup()
+
+  }
+  _renderWorkoutList(workout){
+    let html = `
+    <li class="workout workout--${workout.type}" data-id="${workout.id}">
+        <h2 class="workout__title">${workout.discription}</h2>
+        <div class="workout__details">
+          <span class="workout__icon">${workout.type === 'running' ? '🏃‍♂️' : '🚴‍♀️'}</span>
+          <span class="workout__value">${workout.duration}</span>
+          <span class="workout__unit">km</span>
+        </div>
+        <div class="workout__details">
+          <span class="workout__icon">⏱</span>
+          <span class="workout__value">${workout.distance}</span>
+          <span class="workout__unit">min</span>
+        </div>
+  `;
+
+  if(workout.type === 'running'){
+    html += `
+        <div class="workout__details">
+          <span class="workout__icon">⚡️</span>
+          <span class="workout__value">${workout.pace.toFixed(1)}</span>
+          <span class="workout__unit">min/km</span>
+        </div>
+        <div class="workout__details">
+          <span class="workout__icon">🦶🏼</span>
+          <span class="workout__value">${workout.cadence}</span>
+          <span class="workout__unit">spm</span>
+        </div>
+      </li> 
+
+    `
+  }
+  if(workout.type === 'cycling'){
+    html += `
+        <div class="workout__details">
+          <span class="workout__icon">⚡️</span>
+          <span class="workout__value">${workout.speed.toFixed(1)}</span>
+          <span class="workout__unit">km/h</span>
+        </div>
+        <div class="workout__details">
+          <span class="workout__icon">⛰</span>
+          <span class="workout__value">${workout.elevation}</span>
+          <span class="workout__unit">m</span>
+        </div>
+      </li> 
+
+    `
+  }
+  form.insertAdjacentHTML("afterend",html)
+
+  }
+
+  _MoveToMarker(e){
+    const WorkoutEl = e.target.closest('.workout');
+
+    if(!WorkoutEl) return;
+
+    const foundWorkout = this.#workouts.find(workout =>{
+      return workout.id === +WorkoutEl.dataset.id;
+    })
+
+    if(!foundWorkout) return;
+
+    this.#map.setView(foundWorkout.coords,13, {
+      animate: true,
+      pan: {
+        duration: 1,
+      },
+    });
+  }
+
+  _setLocalStage(){
+    localStorage.setItem('workouts',JSON.stringify(this.#workouts));
+    
+  }
+
+  _getLocalStorage(){
+    let data = JSON.parse(localStorage.getItem('workouts'));
+
+    if(!data) return;
+
+    data.forEach(obj=>{
+      let workout;
+
+      if (obj.type === 'running') {
+        workout = new Running(obj.coords, obj.duration, obj.distance, obj.cadence);
+      } else if (obj.type === 'cycling') {
+        workout = new Cycling(obj.coords, obj.duration, obj.distance, obj.elevation);
+      }    
+      this.#workouts.push(workout)
+      this._renderWorkoutList(workout)
+    })
+  }
+
+  _reset(){
+    localStorage.removeItem('workouts');
+    location.reload()
+  }
+}
+
+const app = new App();
+*/
